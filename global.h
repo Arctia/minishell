@@ -12,6 +12,9 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
+# define NAME_MAX 255
+# define PATH_MAX 1024
+
 enum e_bool {
 	false,
 	true,
