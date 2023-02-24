@@ -59,6 +59,8 @@ void	ft_putstr_fd(char *s, int fd)
 
 void	ft_putendl_fd(char *s, int fd)
 {
+	// if (s[0] == 0)
+	// 	return ;
 	ft_putstr_fd(s, fd);
 	ft_putchar_fd('\n', fd);
 }
@@ -159,6 +161,7 @@ char	**ft_arrdup(char **arr)
 		}
 		i++;
 	}
+	rtn[i] = NULL;
 	return (rtn);
 }
 
@@ -168,11 +171,12 @@ int env(t_hellmini *minishell)
 	int	i;
 
 	i = 0;
-	while (minishell->env)
+	while (minishell->env[i])
 	{
+		// if (minishell->env[1][0] == 0)
+		// 	break ;
 		ft_putendl_fd(minishell->env[i], 1);
 		i++;
-
 	}
 	return (0);
 }
@@ -183,10 +187,6 @@ int main(int argc, char **argv, char **envp)
 	int a;
 
 	minishell.env = ft_arrdup(envp);
-
 	a = env(&minishell);
-
 	return (0);
-
-
 }
