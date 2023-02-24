@@ -63,6 +63,74 @@ void	ft_putendl_fd(char *s, int fd)
 	ft_putchar_fd('\n', fd);
 }
 
+size_t	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str[i])
+		return (i);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+void	*ft_bzero(void *str, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((char *)str)[i] = '\0';
+		i++;
+	}
+	return (str);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	int		*ret;
+
+	ret = malloc(count * size);
+	if (!ret)
+		return (0);
+	ft_bzero(ret, count * size);
+	return (ret);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*s2;
+	size_t	size;
+	size_t	i;
+
+	i = 0;
+	size = ft_strlen(s1);
+	s2 = (char *)malloc((size * sizeof(char)) + 1);
+	if (!s2)
+		return (0);
+	while (i < size)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}
+
+void	free_arr(char **split_arr)
+{
+	int	i;
+
+	i = 0;
+	while (split_arr[i])
+	{
+		free(split_arr[i]);
+		i++;
+	}
+	free(split_arr);
+}
 
 /*____________
 UTILS
@@ -109,14 +177,16 @@ int env(t_hellmini *minishell)
 	return (0);
 }
 
-int main(char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	t_hellmini	*minishell;
+	t_hellmini	minishell;
+	int a;
 
-	minishell->env = ft_arrdup(envp);
+	minishell.env = ft_arrdup(envp);
 
+	a = env(&minishell);
 
-	return  (env(&minishell));
+	return (0);
 
 
 }
