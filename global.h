@@ -40,3 +40,5 @@ typedef struct s_command
 
 	t_hellmini *shell;
 }	t_command;
+
+#endif

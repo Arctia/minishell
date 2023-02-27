@@ -19,3 +19,55 @@ processes will be redirected to errfile
 					
 	***********************************************************
 */
+
+
+
+void erase(node *head, int index)
+{
+    // Check if the linked list is empty
+    if (head == NULL)
+        return;
+
+    // If the index is 0, then we want to remove the head of the list
+    if (index == 0)
+    {
+        // Store a pointer to the head of the list
+        node *temp = head;
+
+        // Set the head of the list to point to the next node in the list
+        head = head->next;
+
+        // Free the memory allocated for the original head of the list
+        free(temp);
+
+        // Return from the function
+        return;
+    }
+
+    // Store a pointer to the current node
+    node *current = head;
+
+    // Iterate through the linked list until we reach the node before the one we want to delete
+    for (int i = 0; i < index - 1; i++)
+    {
+        // If the current node is NULL, then we have reached the end of the list
+        if (current == NULL)
+            return;
+
+        // Move to the next node in the list
+        current = current->next;
+    }
+
+    // Store a pointer to the node we want to delete
+    node *temp = current->next;
+
+    // If the node we want to delete is NULL, then we have reached the end of the list
+    if (temp == NULL)
+        return;
+
+    // Set the next pointer of the current node to point to the node after the one we want to delete
+    current->next = temp->next;
+
+    // Free the memory allocated for the node we want to delete
+    free(temp);
+}

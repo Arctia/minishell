@@ -1,4 +1,4 @@
-#include "global.h"
+#include "../global.h"
 
 /*
 	***********************************************************
@@ -27,14 +27,17 @@ ft_expander()
 	***********************************************************
 					FT_EXECUTOR					
 	***********************************************************
-	is pseudocode
+	is pseudocode (i commenti sparsi nel codice sono temporanei
+	man mano che completo il codice li levo)
 */
 ft_executor(t_command *parser)
 {
 	int		end[2];
+	int		pid;
 	int		fd_in;
 
 	fd_in = STDIN_FILENO;
+
 	while (loop on t_command node from parser)
 	{
 		if (parser->command == '$')
@@ -46,6 +49,13 @@ ft_executor(t_command *parser)
 		else
 		{
 			pid = fork(); //maybe in ft_fork or ft_simplecommand
+			ft_execv(); //call execv
+			dup2(STDIN_FILENO, parser->next );// ???? forse non c'ho piu' capito tanto a st'ora
+			// dup2(STDIN_FILENO, STDOUT_FILENO);
+			// wait();
+
+
+
 
 			
 
