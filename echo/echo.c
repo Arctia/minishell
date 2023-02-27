@@ -86,7 +86,7 @@ int	main(int argc,char **argv)
 		{
 			put_str_fd(cmd->args[n++], 1);
 			if (n <= argc -2)
-				write(1, " ", 2);
+				write(1, " ", 1);
 		}
 	}
 	if (!n_flag)
@@ -122,7 +122,7 @@ int	main(int argc,char **argv)
 //		{
 //			put_str_fd(cmd->args[n++], 1);
 //			if (n <= argc -2)
-//				write(1, " ", 2);
+//				write(1, " ", 1);
 //		}
 //		if (!n_flag)
 //			write(1, "\n", 1);
