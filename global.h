@@ -21,10 +21,10 @@ typedef struct s_hellmini
 	char 		**env;
 
 	int			*exit_status;
-	t_command 	*cmd;
+	struct s_command 	*cmd;
 
 
-    pid_t 		pid; // maybe 
+    pid_t 		pid; // maybe
 }           t_hellmini;
 
 typedef struct s_command
@@ -35,8 +35,10 @@ typedef struct s_command
 
 	int		ret;
 
-	t_command *next;
-	t_command *prev;
+	struct s_command *next;
+	struct s_command *prev;
 
 	t_hellmini *shell;
 }	t_command;
+
+#endif
