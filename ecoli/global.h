@@ -1,3 +1,4 @@
+
 #ifndef GLOBAL_H
 # define GLOBAL_H
 
@@ -14,27 +15,26 @@
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
-typedef struct s_hellmini
-{
-	char 		**env;
+enum e_bool {
+	false,
+	true,
+};
 
-	int			*exit_status;
-	t_command 	*cmd;
-
-
-    pid_t 		pid; // maybe 
-}           t_hellmini;
+enum e_io {
+	in,
+	out,
+	err,
+};
 
 typedef struct s_command
 {
-	char	*command;
-	char	**flags; // null terminated
-	char	**arguments; // null terminated
-
-	int		ret;
-
-	t_command *next;
-	t_command *prev;
-
-	t_hellmini *shell;
+	char	args[2048][2048];
+	char	rdr_in[2048][2048];		// <
+	char	rdr_out[2048][2048];	// >
+	char	heredoc[2048][2048];	// <<
+	char	append[2048][2048];		// >>
+	int		ret;		//return del comando
+	int		err;		//errorno
 }	t_command;
+
+#endif
