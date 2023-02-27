@@ -25,7 +25,7 @@ void	replace_string(char *s1, const char *s2)
 	//s1[i] = 0;
 }
 
-int	too_much_arguments(char arg[2024])
+int	too_many_arguments(char arg[2024])
 {
 	if (arg[0] != 0)
 	{
@@ -107,7 +107,7 @@ int	cd(t_command *cmd)
 	int		i;
 
 	i = 0;
-	if (too_much_arguments(cmd->args[2]) == 1)
+	if (too_many_arguments(cmd->args[2]) == 1)
 		return (1);
 	else if (cmd->args[1][0] == 0)
 		replace_string(cmd->args[1], getenv("HOME"));
