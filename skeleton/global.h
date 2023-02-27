@@ -16,22 +16,24 @@
 
 typedef struct s_hellmini
 {
-	char **env;
-	t_command *cmd; // we need it?
-    pid_t pid;
+	char 		**env;
 
+	int			*exit_status;
+	t_command 	*cmd;
+
+    pid_t 		pid; // maybe 
 }           t_hellmini;
-
 
 typedef struct s_command
 {
-	char	args[2048][2048];
-	char	rdr_in[2048][2048];		// <
-	char	rdr_out[2048][2048];	// >
-	char	heredoc[2048][2048];	// <<
-	char	append[2048][2048];		// >>
-	int		ret;		//return del comando
-	int		err;		//errorno
+	char	*command;
+	char	**flags;
+	char	**arguments;
+
+	int		ret;
+
+	t_command *next;
+	t_command *prev;
+
+	t_hellmini *shell;
 }	t_command;
-
-
