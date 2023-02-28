@@ -7,7 +7,17 @@
 #define BYEL "\e[1;33m"
 # define PROMPT "\033[1;31mminisHELL$:\033[0m "
 
-void	prompt_loop(t_hellmini *shell)
+//rip_and_tear is the name of a song from DOOM's O.S.T..
+//I think it's quite an appropriate name for the process of splitting and
+//tokenizing the input. And it's quite some badass music.
+//If you don't agree, feel free to go and f##k off :)
+
+
+// int	command_init(t_command command)
+// {
+
+// }
+int	prompt_loop(t_hellmini *shell)
 {
 //signal
 	//signal
@@ -15,15 +25,22 @@ void	prompt_loop(t_hellmini *shell)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, sigquit_handler);
-		shell->cmd->command = readline(PROMPT);
-
+		shell->current_cmd->command = readline(PROMPT);
+		if(!shell->current_cmd->command)
+			return (0 * write(1, "\n", 1));
+		//command_init(*shell->current_cmd);
+		if (ft_strncmp(shell->current_cmd->command, "exit", 4))
+			exit(0);
 	}
+	rip_and_tear(shell->current_cmd, shell->current_cmd->command);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_hellmini	shell;
 	//env_init()
+	//shell_init?
 	(void)argc;
 	(void)argv;
 	(void)env;

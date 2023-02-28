@@ -6,6 +6,7 @@ CC=gcc
 FLAGS=-Wall -Werror -Wextra
 
 SRCS=	./main/signals.c \
+		./main/tokenizer.c \
 		./main/main.c \
 
 OBJS=$(SRCS:.c=.o)
