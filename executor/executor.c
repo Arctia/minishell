@@ -18,6 +18,51 @@ ft_expander()
 
 }
 
+/*
+	***********************************************************
+					FT_GETPATH
+	***********************************************************
+
+
+*/
+
+char *ft_getpath()
+{
+	struct dirent entry;//studia!!
+	while()
+	{
+		opendir;
+		readdir;
+		closedir;
+	}
+	split($,:);
+	return (path);
+}
+
+/*
+	***********************************************************
+					FT_EXECV
+	***********************************************************
+	arg is a matrix with:
+	in n "cmd name" in n+1 "eventually opt(flag)" in n+2 "argument"
+
+*/
+
+ft_execv()
+{
+	char * path;
+	char **arg;
+	char **env;
+
+	arg = ft_listtomatrix();
+	path = ft_getpath();
+	 if (execve(path,arg,env) == -1) {
+      perror("execution failed");
+    }
+    exit(EXIT_FAILURE);
+	
+}
+
 // Bultin ?
 // No built in ?````
 //     Fork
@@ -29,38 +74,55 @@ ft_expander()
 	***********************************************************
 	is pseudocode (i commenti sparsi nel codice sono temporanei
 	man mano che completo il codice li levo)
+
+	== should be a strcmp
+
+	maybe i need fd_in and fd_out in the command struct to swap 
+	fd between pipe
+
+	maybe wrong use of perror
 */
 ft_executor(t_command *parser)
 {
-	int		end[2];
+	int		fd[2];
 	int		pid;
 	int		fd_in;
 
 	fd_in = STDIN_FILENO;
 
-	while (loop on t_command node from parser)
+	while (parser->command)
 	{
+
 		if (parser->command == '$')
 			ft_expander();
+		pipe(fd);
 		if (parser->command == '<<')
 			ft_heredoc();
-		if (parser->command == builtin[i])
-			builtin[i];					//ft_builtin
+		else if (parser->command == builtin[i])
+			builtin[i];		//array con selettore funzioni
+		else if (parser->command == '|')
+		{
+			pid = fork(); //maybe in directly in ft_execv?
+			if (pid == 0)
+				ft_execv(parser->command);
+			else if ( pid < 0)
+				perror("fork failed");
+			// else
+			// {
+			// 	waitpid(pid, &status, WUNTRACED);
+			// 	while (!WIFEXITED(status) && !WIFSIGNALED(status))
+			// 	waitpid(pid, &status, WUNTRACED);
+			// }
+
+			// fd_in fd_out
+			fd1 = dup(fd0);	//clone fd
+			close(fd0);
+			dup2(fd3,fd4);	//clone fd3 on fd4 
+			close(fd3);//dup2 duplicate the fd so is good to close the old one
+		}
 		else
 		{
-			pid = fork(); //maybe in ft_fork or ft_simplecommand
-			ft_execv(); //call execv
-			dup2(STDIN_FILENO, parser->next );// ???? forse non c'ho piu' capito tanto a st'ora
-			// dup2(STDIN_FILENO, STDOUT_FILENO);
-			// wait();
-
-
-
-
-			
-
-
-			ft_simple_command(parser->command);
+			ft_execv(parser->command);
 		}
 		
 	}
