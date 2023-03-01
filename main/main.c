@@ -25,11 +25,11 @@ int	prompt_loop(t_hellmini *shell)
 	{
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, sigquit_handler);
-		shell->current_cmd->command = readline(PROMPT);
-		if(!shell->current_cmd->command)
+		shell->input = readline(PROMPT);
+		if(!shell->input)
 			return (0 * write(1, "\n", 1));
 		//command_init(*shell->current_cmd);
-		if (ft_strncmp(shell->current_cmd->command, "exit", 4))
+		if (ft_strncmp(shell->input, "exit", 4))
 			exit(0);
 	}
 	rip_and_tear(shell->current_cmd, shell->current_cmd->command);

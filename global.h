@@ -20,13 +20,17 @@
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
-	char 		**env;
+	char 				**env;
 
-	int			*exit_status;
+	int					*exit_status;
+	char				*input;
 	struct s_command 	*current_cmd;
+	int					mc_pipes;
+	int					mc_quotes;
+	int					mc_wquotes;
 
 
-    pid_t 		pid; // maybe
+    pid_t 				pid; // maybe
 }           t_hellmini;
 
 //words_operators e'la prima splittata(" ")dell'input, ergo la prima tokenizzazione;
@@ -34,26 +38,23 @@ typedef struct s_hellmini
 //soprattutto in presenza di < > << >>)
 typedef struct s_command
 {
-	char	**words_operators;
-	char	*command;
-	char	**flags;
-	char	**arguments;
-	int		mc_pipes;
-	int		mc_quotes;
-	int		mc_wquotes;
+	char				**words_operators;
+	char				*command;
+	char				**flags;
+	char				**arguments;
 
 	int		ret;
 
-	struct s_command *next;
-	struct s_command *prev;
+	struct s_command 	*next;
+	struct s_command 	*prev;
 
-	t_hellmini *shell;
+	t_hellmini 			*shell;
 }	t_command;
 
 //tokenizer.c
 //
 //
 //
-t_command	* count_pqwq(t_command *command, char *str);
-int			rip_and_tear(t_command *command, char *str);
+t_command				* count_pqwq(t_command *command, char *str);
+char					**rip_and_tear(t_command *command, char *str);
 #endif
