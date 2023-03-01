@@ -38,6 +38,9 @@ char	*ft_findpath()
 {
 	DIR				dir;
 	struct dirent	*entry;//studia!!
+
+	dir = opendir()
+
 	while()
 	{
 		opendir;
@@ -102,19 +105,25 @@ ft_executor(t_hellmini *parser)
 
 	while (parser->current_command)
 	{
-
 		if (parser->flag == '$')
 			ft_expander();
-		pipe(fd);
-		if (parser->command == '<<')
+		if (parser->cmd->operator == NULL)
+		{
+			if(parser->current_command == builtin)
+				ft_builtin();
+			else
+				ft_execve();
+		}
+		//pipe(fd);
+		else if (parser->current_command == '<<')
 			ft_heredoc();
-		else if (parser->command == builtin[i])
-			builtin[i];		//array con selettore funzioni
-		else if (parser->command == '|')
+		else if (parser->current_command == '>')
+			ft_redir();
+		else if (parser->current_command == '|')
 		{
 			pid = fork(); //maybe in directly in ft_execv?
 			if (pid == 0)
-				ft_execv(parser->command);
+				ft_execv(parser->current_command);
 			else if ( pid < 0)
 				perror("fork failed");
 			// else
@@ -130,12 +139,8 @@ ft_executor(t_hellmini *parser)
 			dup2(fd3,fd4);	//clone fd3 on fd4 
 			close(fd3);//dup2 duplicate the fd so is good to close the old one
 		}
-		else
-		{
-			ft_execv(parser->command);
-		}
-		if(parser->current_command.next)
-			parser->current_command =parser->current_command.next;
+		if(parser->cmd->next)
+			parser->current_command =parser->cmd->next;
 		
 	}
 }
