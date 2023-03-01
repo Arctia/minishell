@@ -29,13 +29,14 @@ typedef struct s_hellmini
 
 typedef struct s_command
 {
-	char	*command;
-	char	**flags;
-	char	**arguments;
+	char	*command;		//ls	//ls 	//cd
+	char	**flags;		//la	//la	
+	char	**arguments;					//..
 
 	int		ret;
 
-	t_command *next;
+	t_command	*next;				//cd
+	char		*operator;			//|		//>		//>>
 	t_command *prev;
 
 	t_hellmini *shell;

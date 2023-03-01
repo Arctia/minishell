@@ -26,9 +26,18 @@ ft_expander()
 
 */
 
-char *ft_getpath()
+char	*ft_getpath(t_hellmini *shell)
 {
-	struct dirent entry;//studia!!
+	while (shell->env[i++])
+		while (shel.env[j++])
+	;
+}
+
+//
+char	*ft_findpath()
+{
+	DIR				dir;
+	struct dirent	*entry;//studia!!
 	while()
 	{
 		opendir;
@@ -43,19 +52,20 @@ char *ft_getpath()
 	***********************************************************
 					FT_EXECV
 	***********************************************************
+	path == usr/bin/ls
+	arg == bin/ls			-la
 	arg is a matrix with:
 	in n "cmd name" in n+1 "eventually opt(flag)" in n+2 "argument"
-
 */
 
 ft_execv()
 {
 	char * path;
-	char **arg;
+	char **arg; //array[4] tt a null e metto dentro i cmd che mi servono
 	char **env;
 
 	arg = ft_listtomatrix();
-	path = ft_getpath();
+	path = ft_findpath();
 	 if (execve(path,arg,env) == -1) {
       perror("execution failed");
     }
@@ -82,7 +92,7 @@ ft_execv()
 
 	maybe wrong use of perror
 */
-ft_executor(t_command *parser)
+ft_executor(t_hellmini *parser)
 {
 	int		fd[2];
 	int		pid;
@@ -90,10 +100,10 @@ ft_executor(t_command *parser)
 
 	fd_in = STDIN_FILENO;
 
-	while (parser->command)
+	while (parser->current_command)
 	{
 
-		if (parser->command == '$')
+		if (parser->flag == '$')
 			ft_expander();
 		pipe(fd);
 		if (parser->command == '<<')
@@ -124,6 +134,8 @@ ft_executor(t_command *parser)
 		{
 			ft_execv(parser->command);
 		}
+		if(parser->current_command.next)
+			parser->current_command =parser->current_command.next;
 		
 	}
 }
