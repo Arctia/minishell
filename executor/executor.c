@@ -18,37 +18,81 @@ ft_expander()
 
 }
 
+
+char	*ft_append(char * path, t_hellmini *shell)
+{
+	char	*ret;
+	int		i;
+
+	i = -1;
+	ret = malloc(sizeof(char *) * (ft_strlen(path) + ft_strlen(shell->current_command)) + 1);
+	if (!ret)
+		return NULL;
+	while (*path)
+		*ret++ = *path++;
+	while (*shell->current_command++)
+		*ret++ = *shell->current_command++;
+	*ret++ = '\0';
+	return (ret);
+	// ret = ft_strdup(path);
+}
+
 /*
 	***********************************************************
 					FT_GETPATH
 	***********************************************************
-
+	path da freeare
 
 */
 
-char	*ft_getpath(t_hellmini *shell)
+char	**ft_getpath(t_hellmini *shell)
 {
-	while (shell->env[i++])
-		while (shel.env[j++])
-	;
+	int		i;
+	char	**path;
+
+	i = 0;
+	while (shell->env[i])
+	{
+		if(ft_strncmp("PATH" ,shell->env[i], 4) == 0)
+		{
+			path = ft_split(ft_strtrim(shell->env[i], "PATH="), ':');
+			break;
+		}
+		i++;
+	}
+	return (path);		
 }
 
 //
-char	*ft_findpath()
+char	*ft_findpath(t_hellmini *shell)
 {
-	DIR				dir;
+	DIR				*dir;
 	struct dirent	*entry;//studia!!
+	char			**path;
+	int				i;
 
-	dir = opendir()
-
-	while()
+	i = 0;
+	path = ft_getpath(shell); //path alloca probabilemnte devo allocare per usare strtrim e freeare
+	while (path[i])
 	{
-		opendir;
-		readdir;
-		closedir;
+		dir = opendir(path[i]);
+		entry = readdir(dir);
+		while (entry)
+		{
+			if (entry->d_name == shell->current_command)
+			{
+				closedir(entry);
+				return(ft_append(path[i], shell)); //append command to path
+			}
+			else
+			{
+				// ft_seekdir();
+				perror("path not found");
+			}
+		}
 	}
-	split($,:);
-	return (path);
+	closedir(entry);
+	return (NULL);
 }
 
 /*
@@ -58,17 +102,16 @@ char	*ft_findpath()
 	path == usr/bin/ls
 	arg == bin/ls			-la
 	arg is a matrix with:
-	in n "cmd name" in n+1 "eventually opt(flag)" in n+2 "argument"
 */
 
-ft_execv()
+ft_execv(t_hellmini  *shell)
 {
 	char * path;
 	char **arg; //array[4] tt a null e metto dentro i cmd che mi servono
 	char **env;
 
 	arg = ft_listtomatrix();
-	path = ft_findpath();
+	path = ft_findpath(shell);
 	 if (execve(path,arg,env) == -1) {
       perror("execution failed");
     }
@@ -105,7 +148,7 @@ ft_executor(t_hellmini *parser)
 
 	while (parser->current_command)
 	{
-		if (parser->flag == '$')
+		if (parser->flag == 1)
 			ft_expander();
 		if (parser->cmd->operator == NULL)
 		{

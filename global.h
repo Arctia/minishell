@@ -10,6 +10,7 @@
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <dirent.h>
 
 // Constant declarations
 # define NAME_MAX 255
