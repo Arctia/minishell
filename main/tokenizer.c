@@ -76,7 +76,7 @@ char	**rip_and_tear(t_command *command, char *str)
 {
 	int		i;
 	int		n_cmds;
-	char	**tkn_matrix;
+	//char	**tkn_matrix;
 
 	i = 0;
 	n_cmds = 1;

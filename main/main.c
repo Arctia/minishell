@@ -26,12 +26,17 @@ int	prompt_loop(t_hellmini *shell)
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, sigquit_handler);
 		shell->input = readline(PROMPT);
-		if(!shell->input)
+		if (!shell->input)
 			return (0 * write(1, "\n", 1));
+		if (ft_strncmp(shell->input, "", 1))
+			add_history(shell->input);
+
 		//command_init(*shell->current_cmd);
-		if (ft_strncmp(shell->input, "exit", 4))
-			exit(0);
+		// if (ft_strncmp(shell->input, "exit", 4))
+		// 	exit(0);
+		exp_tkn("$user", shell->env);
 	}
+
 	rip_and_tear(shell->current_cmd, shell->current_cmd->command);
 	return (0);
 }

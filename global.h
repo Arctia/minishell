@@ -57,4 +57,7 @@ typedef struct s_command
 //
 t_command				* count_pqwq(t_command *command, char *str);
 char					**rip_and_tear(t_command *command, char *str);
+
+//expander.c
+char					*exp_tkn(char *str, char **env);
 #endif
