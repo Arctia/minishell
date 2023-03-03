@@ -33,12 +33,15 @@ ft_execv(t_hellmini  *shell)
 	char **arg; //array[4] tt a null e metto dentro i cmd che mi servono
 	char **env;
 
-	arg = ft_listtomatrix();
+	arg = ft_listtomatrix(shell->cmd, shell);
 	path = ft_findpath(shell, 0);
-	 if (execve(path,arg,env) == -1) {
-      perror("execution failed");
-    }
-    exit(EXIT_FAILURE);
+	if (execve(path,arg,env) == -1) 
+	{
+	  perror("execution failed");
+	}
+	ft_freestrarr(arg);
+	free(path);
+	// exit(EXIT_FAILURE);
 	
 }
 

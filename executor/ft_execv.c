@@ -4,32 +4,37 @@
 	***********************************************************
 					FT_LISTTOMATRIX
 	***********************************************************
-	typedef struct s_command
-{
-	char	*command;		//ls	//ls 	//cd
-	char	**flags;		//la	//la	
-	char	**arguments;					//..
-
-	int		ret;
-
-	struct s_command	*next;				//cd
-	char		*operator;			//|		//>		//>>
-	struct s_command *prev;
-
-	struct s_hellmini *shell;
-}	t_command;
+	working
+	arg is allocated remember to free
+	there is both t_command both t_hellmini perchè pe testa non 
+	know how to do
 */
 
-char	**ft_listtomatrixx(t_hellmini *shell)
+char	**ft_listtomatrix(t_command *cmd, t_hellmini *shell)
 {
-	char    **arg;
+	char	**arg;
+	int		i;
+	int		j;
 
-	arg[0] = 
-
-	
-
-
-
+	arg = NULL;
+	i = 1;
+	j = 0;
+	while (cmd->arguments[j++])
+		i++;
+	j = 0;
+	while (cmd->flags[j++])
+		i++;
+	arg = ft_calloc(sizeof(char *), i);
+	arg[0] = ft_strdup(shell->current_command);
+	i = 1; 
+	j =	-1;
+	while (cmd->flags[++j])
+		arg[i++] = ft_strdup(cmd->flags[j]);
+	j = -1;
+	while (cmd->arguments[++j])
+		arg[i++] = ft_strdup(cmd->arguments[j]);
+	arg[i++] = NULL;
+	return (arg);
 }
 
 /*
