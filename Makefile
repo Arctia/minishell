@@ -8,6 +8,7 @@ FLAGS=-Wall -Werror -Wextra
 SRCS=	./main/signals.c \
 		./main/tokenizer.c \
 		./main/expander.c \
+		./main/env_handlers.c \
 		./main/main.c \
 
 OBJS=$(SRCS:.c=.o)

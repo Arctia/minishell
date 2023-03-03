@@ -37,7 +37,8 @@ int	tkn_nbr(char *str)
 }
 
 //count the lenght until the first occurence of char
-//(mainly to get the size necessary to malloc tokens)
+//(mainly to get the size necessary to malloc tokens
+//or to get the value of an index from an env var)
 int	ft_strchr_len(char *str, char c)
 {
 	int	i;
@@ -50,7 +51,7 @@ int	ft_strchr_len(char *str, char c)
 }
 
 //read the string and store the number of pipes, quotes and double quotes
-//inside the shell's struct;at the mpment is definetly incomplete, not considering quoted characters)
+//inside the shell's struct;at the moment is definetly incomplete, not considering quoted characters)
 t_command	* count_pqwq(t_command *command, char *str)
 {
 	int	i;

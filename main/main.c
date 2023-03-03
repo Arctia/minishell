@@ -31,9 +31,12 @@ int	prompt_loop(t_hellmini *shell)
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
 
-		//command_init(*shell->current_cmd);
-		// if (ft_strncmp(shell->input, "exit", 4))
-		// 	exit(0);
+		//command_init(&shell);
+		if (ft_strncmp(shell->input, "exit", 4))
+		{
+			//ft_free_structs();
+			exit(0);
+		}
 		exp_tkn("$user", shell->env);
 	}
 
@@ -41,14 +44,29 @@ int	prompt_loop(t_hellmini *shell)
 	return (0);
 }
 
+void	init_shell(t_hellmini *shell)
+{
+	//shell->env = env
+	// init_shell_env(env, shell);
+	shell->exit_status = 0;
+	shell->input = NULL;
+	shell->mc_pipes = 0;
+	shell->mc_quotes = 0;
+	shell->mc_wquotes = 0;
+	shell->current_cmd = NULL;
+	//shell->pid = 0;
+	printf("Shell initialized\n");
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_hellmini	shell;
-	//env_init()
+
 	//shell_init?
 	(void)argc;
 	(void)argv;
 	(void)env;
+	init_shell(&shell);
 	prompt_loop(&shell);
 
 }

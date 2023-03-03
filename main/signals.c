@@ -11,7 +11,7 @@ void	sigint_handler(int sig)
 void	sigquit_handler(int sig)
 {
 	(void)sig;
-	write(1, "exit\n", 5);
+	write(1, "exit\n", 6);
 	rl_on_new_line();
 	rl_redisplay();
 	exit(0);

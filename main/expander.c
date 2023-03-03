@@ -15,7 +15,7 @@ char *exp_tkn(char *str, char **env)
 
 	i = 0;
 	j = 0;
-	if (!str || !env || !ft_strlen(NULL))
+	if (!str || !env || !ft_strlen(str))
 		return(NULL);
 	while (ft_strncmp(str, env[i], ft_strlen(str)))
 		i++;
@@ -43,6 +43,7 @@ void    free_arr(char **split_arr)
     }
     free(split_arr);
 }
+
 char    **ft_arrdup(char **arr)
 {
     char    **rtn;
