@@ -34,7 +34,7 @@ ft_execv(t_hellmini  *shell)
 	char **env;
 
 	arg = ft_listtomatrix();
-	path = ft_findpath(shell);
+	path = ft_findpath(shell, 0);
 	 if (execve(path,arg,env) == -1) {
       perror("execution failed");
     }
@@ -51,6 +51,7 @@ ft_execv(t_hellmini  *shell)
 	***********************************************************
 					FT_EXECUTOR					
 	***********************************************************
+	the name is parser because it come from Parser
 	is pseudocode (i commenti sparsi nel codice sono temporanei
 	man mano che completo il codice li levo)
 
@@ -71,11 +72,11 @@ ft_executor(t_hellmini *parser)
 
 	while (parser->current_command)
 	{
-		if (parser->flag == 1)
+		if (parser->cmd->export == 1)
 			ft_expander();
 		if (parser->cmd->operator == NULL)
 		{
-			if(parser->current_command == builtin)
+			if(parser->current_command == builtin[])
 				ft_builtin();
 			else
 				ft_execve();

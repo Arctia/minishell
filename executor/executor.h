@@ -11,6 +11,16 @@
 
 char	*ft_append(char * path, t_hellmini *shell);
 char	**ft_getpath(t_hellmini *shell);
-char	*ft_findpath(t_hellmini *shell);
+char	*ft_findpath(t_hellmini *shell, int i);
+
+
+/*
+	***********************************************************
+					utils
+	***********************************************************
+*/
+
+void	ft_freestrarr(char **split_arr);
+
 
 #endif

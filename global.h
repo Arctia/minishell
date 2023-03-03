@@ -34,11 +34,13 @@ typedef struct s_command
 	char	*command;		//ls	//ls 	//cd
 	char	**flags;		//la	//la	
 	char	**arguments;					//..
-
 	int		ret;
+	char	*operator;			//|		//>		//>>
+	int		export;
+
+
 
 	struct s_command	*next;				//cd
-	char		*operator;			//|		//>		//>>
 	struct s_command *prev;
 
 	struct s_hellmini *shell;
