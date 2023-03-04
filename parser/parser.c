@@ -100,6 +100,7 @@ static void	set_flags(t_command *cmd)
 
 /*##############################################################################
 #	Set Arguments
+		° slide string and obtain
 ##############################################################################*/
 static void	set_arguments(t_command *cmd)
 {
@@ -107,7 +108,7 @@ static void	set_arguments(t_command *cmd)
 }
 
 /*##############################################################################
-#	Parser receives shell struct, cycles through all commands and
+#	Tokenizer receives shell struct, cycles through all commands and
 		fill their fields. Every command struct should have a
 		str, which stores input with the operator at the end.
 ##############################################################################*/
@@ -116,7 +117,7 @@ int	parser(t_hellmini *sh)
 	t_command	*cmd;
 
 	cmd = sh->current_cmd;
-	// tokenize
+	// tokenizer
 	while (cmd)
 	{
 		set_command_name(&cmd);
@@ -124,7 +125,7 @@ int	parser(t_hellmini *sh)
 		set_arguments(&cmd);
 		cmd = cmd->next;
 	}
-	// parser
+	// parser --> syntax checker
 }
 
 int	main()
