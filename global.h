@@ -17,6 +17,8 @@
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
+# define PROMPT "\033[1;31mminisHELL$:\033[0m "
+
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
@@ -64,5 +66,8 @@ char					*exp_tkn(char *str, char **env);
 //env_handlers.c
 void					init_shell_env(char **pr_env, t_hellmini shell);
 
-
+//signals.c
+void					sigint_handler(int sig);
+void					sigquit_handler(int sig);
+void					sigquit_macro(int sig, t_hellmini *shell);
 #endif

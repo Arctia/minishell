@@ -7,6 +7,7 @@ void	init_shell_env(char **or_env, t_hellmini shell)
 	//int		j;
 	char	*lvl;
 
+	//ft_putstr_fd("Dioboia",1);
 	shell.env = ft_arrdup(or_env);
 	if (!shell.env)
 	{
@@ -23,5 +24,8 @@ void	init_shell_env(char **or_env, t_hellmini shell)
 		}
 		i++;
 	}
+	//for feedback only
+	ft_putstr_fd(shell.env[2], 1);
+	ft_putstr_fd(shell.env[3], 1);
 	free(lvl);
 }

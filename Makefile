@@ -34,6 +34,7 @@ clean:
 		$(MAKE) clean -C ./libft
 
 fclean: clean
+		rm -f *.o
 		rm -f $(NAME)
 		$(MAKE) fclean -C ./libft
 
