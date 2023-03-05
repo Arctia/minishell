@@ -1,6 +1,24 @@
 
 #include "./../global.h"
 
+/* To Do
+	1. Split the string into a matrix! Is easier. That way you can delimit 
+		double or single quotes directly. Then the first item goes into cmd, 
+		then if the first character of next items is "-" store them into flags 
+		and then only arguments..
+		While doing it:
+			- if encountering a space split and store the item in a matrix
+				quite simple, right? Yeah need to consider double and single
+				quote/s while doing that, if encountering one, wait until is
+				closed.
+			- if the double quote closes and the next character is adjacent (no 
+				space between them) remove the quote and keep going until 
+				space is found. Same applies to quotes inside a word!
+			- do not consider quotes inside quotes!
+	2. Parser check syntax (?)
+	3. ...
+*/
+
 /*##############################################################################
 #	Help Functions
 ##############################################################################*/
