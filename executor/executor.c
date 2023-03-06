@@ -13,36 +13,69 @@
 	Pay attention to export : export a = ls
 	$a-> ls
 */
-ft_expander()
+char	*ft_expander(char *str, char **env)
 {
-
+	int	i;
+	int	j;
+	int	k;
+	char	*new_token;
+	i = 0;
+	j = 0;
+	if (!str || !env || !ft_strlen(str))
+		return(NULL);
+	while (ft_strncmp(str, env[i], ft_strlen(str)))
+		i++;
+	while (env[i][j] != '=')
+		j++;
+	new_token = (char *)malloc(ft_strlen(env[i] + 2 - j));
+	if (!new_token)
+		return (NULL);
+	k = 0;
+	while(env[i])
+	{
+		new_token[k++] = env[i][j++];
+		//write for debug only
+		//write(1, &new_token[k], 1);
+	}
+	new_token[k] = '\0';
+	return (new_token);
 }
 
 /*
 	***********************************************************
 					FT_EXECV
 	***********************************************************
-	path == usr/bin/ls
-	arg == bin/ls			-la
-	arg is a matrix with:
+	working 
+	l'ultimo else mi è un po' oscuro 
+	we have to decide if do the fork in ft execve or in executor
 */
 
-ft_execv(t_hellmini  *shell)
+void	ft_execv(t_hellmini  *shell, pid_t pid)
 {
-	char * path;
-	char **arg; //array[4] tt a null e metto dentro i cmd che mi servono
-	char **env;
+	char	*path;
+	char	**arg; //array[4] tt a null e metto dentro i cmd che mi servono
+	char	**env;
+	int		status;
 
 	arg = ft_listtomatrix(shell->cmd, shell);
 	path = ft_findpath(shell, 0);
-	if (execve(path,arg,env) == -1) 
+	pid = fork();
+	if (!pid)
 	{
-	  perror("execution failed");
+		if (execve(path,arg,env) == -1) 
+			perror("execution failed");
+	}
+	else if (pid < 0)
+			perror("fork failed");
+	else
+	{
+		waitpid(pid, &status, WUNTRACED);
+		while (!WIFEXITED(status) && !WIFSIGNALED(status))
+			waitpid(pid, &status, WUNTRACED);
 	}
 	ft_freestrarr(arg);
 	free(path);
 	// exit(EXIT_FAILURE);
-	
 }
 
 // Bultin ?
@@ -68,7 +101,7 @@ ft_execv(t_hellmini  *shell)
 ft_executor(t_hellmini *parser)
 {
 	int		fd[2];
-	int		pid;
+	pid_t	pid;
 	int		fd_in;
 
 	fd_in = STDIN_FILENO;
@@ -76,7 +109,7 @@ ft_executor(t_hellmini *parser)
 	while (parser->current_command)
 	{
 		if (parser->cmd->export == 1)
-			ft_expander();
+			ft_expander(parser->current_command, parser->env);
 		if (parser->cmd->operator == NULL)
 		{
 			if(parser->current_command == builtin[])
@@ -91,23 +124,18 @@ ft_executor(t_hellmini *parser)
 			ft_redir();
 		else if (parser->current_command == '|')
 		{
-			pid = fork(); //maybe in directly in ft_execv?
-			if (pid == 0)
-				ft_execv(parser->current_command);
-			else if ( pid < 0)
-				perror("fork failed");
-			// else
-			// {
-			// 	waitpid(pid, &status, WUNTRACED);
-			// 	while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			// 	waitpid(pid, &status, WUNTRACED);
-			// }
+			ft_pipe()
+			// pipe(fd);
+			// close(fd[0]);
+			// if (parser->cmd->next == NULL)
+			// 	dup2(fd[1],STDOUT_FILENO);
+			// 	ft_execv(parser->current_command,pid);
 
-			// fd_in fd_out
-			fd1 = dup(fd0);	//clone fd
-			close(fd0);
-			dup2(fd3,fd4);	//clone fd3 on fd4 
-			close(fd3);//dup2 duplicate the fd so is good to close the old one
+			// // fd_in fd_out
+			// fd1 = dup(fd0);	//clone fd
+			// close(fd0);
+			// dup2(fd3,fd4);	//clone fd3 on fd4 
+			// close(fd3);//dup2 duplicate the fd so is good to close the old one
 		}
 		if(parser->cmd->next)
 			parser->current_command =parser->cmd->next;
