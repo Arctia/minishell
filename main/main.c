@@ -24,21 +24,28 @@ int	prompt_loop(t_hellmini *shell)
 	while(1)
 	{
 		signal(SIGINT, sigint_handler);
-		//signal(SIGQUIT, sigquit_handler);
-		sigquit_macro(SIGQUIT, shell);
+		signal(SIGQUIT, sigquit_handler);
+		//sigquit_macro(SIGQUIT, shell);
 		shell->input = readline(PROMPT);
 		if (!shell->input)
-			return (0 * write(1, "exit\n", 5));
+		{
+			shell->input = NULL;
+
+			//printf("\033[1;31mminisHELL$:\033[0m exit\n");
+			//printf("exit");
+			exit(0);
+		}
+//			return (0 * write(1, "exit\n", 5));
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
 
 		//command_init(&shell);
-		if (!ft_strncmp(shell->input, "exit\n", 5))
-		{
-			//ft_free_structs();
-			exit(0);
-		}
-		// exp_tkn("$user", shell->env);
+		// if (!ft_strncmp(shell->input, "exit\n", 5))
+		// {
+		// 	//ft_free_structs();
+		// 	exit(0);
+		// }
+	//	exp_tkn("$user", shell->env);
 	}
 
 	//rip_and_tear(shell->current_cmd, shell->current_cmd->command);
@@ -48,7 +55,7 @@ int	prompt_loop(t_hellmini *shell)
 void	init_shell(t_hellmini *shell)
 {
 	//shell->env = env
-	ft_putstr_fd("YO MAN", 1);
+	//ft_putstr_fd("YO MAN", 1);
 	init_shell_env(shell->env, *shell);
 	shell->exit_status = 0;
 	shell->input = NULL;
@@ -70,6 +77,7 @@ int	main(int argc, char **argv, char **env)
 	shell.env = env;
 	init_shell_env(shell.env, shell);
 	init_shell(&shell);
+	//ft_putstr_fd(exp_tkn("USER", shell.env), 1);
 	prompt_loop(&shell);
 
 }

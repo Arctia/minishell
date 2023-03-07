@@ -25,7 +25,7 @@ void	init_shell_env(char **or_env, t_hellmini shell)
 		i++;
 	}
 	//for feedback only
-	ft_putstr_fd(shell.env[2], 1);
-	ft_putstr_fd(shell.env[3], 1);
+	//ft_putstr_fd(shell.env[2], 1);
+	//ft_putstr_fd(shell.env[3], 1);
 	free(lvl);
 }

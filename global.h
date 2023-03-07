@@ -67,6 +67,7 @@ char					*exp_tkn(char *str, char **env);
 void					init_shell_env(char **pr_env, t_hellmini shell);
 
 //signals.c
+void					ft_suppress_output(void);
 void					sigint_handler(int sig);
 void					sigquit_handler(int sig);
 void					sigquit_macro(int sig, t_hellmini *shell);

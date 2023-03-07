@@ -17,20 +17,17 @@ char *exp_tkn(char *str, char **env)
 	j = 0;
 	if (!str || !env || !ft_strlen(str))
 		return(NULL);
-	while (ft_strncmp(str, env[i], ft_strlen(str)))
+	while (!((ft_strncmp(str, env[i], ft_strlen(str))) == 0))
 		i++;
-	while (env[i][j] != '=')
+	while(env[i][j] != '=')
 		j++;
-	new_token = (char *)malloc(ft_strlen(env[i] + 2 - j));
+	j++;
+	new_token = (char *)malloc((ft_strlen(env[i]) + 2 - j));
 	if (!new_token)
 		return (NULL);
 	k = 0;
-	while(env[i])
-	{
+	while(env[i][j])
 		new_token[k++] = env[i][j++];
-		//write for debug only
-		//write(1, &new_token[k], 1);
-	}
 	new_token[k] = '\0';
 	return (new_token);
 }
@@ -52,14 +49,14 @@ char    **ft_arrdup(char **arr)
     size_t  i;
 
 	i = 0;
-    ft_putstr_fd("Dioboia",1);
+    //ft_putstr_fd("Dioboia",1);
 	while (arr[i] != NULL)
         i++;
     rtn = ft_calloc(sizeof(char *), i + 1);
     if (!rtn)
         return (NULL);
     i = 0;
-	ft_putstr_fd("Dioboia2",1);
+	//ft_putstr_fd("Dioboia2",1);
     while (arr[i] != NULL)
     {
         rtn[i] = ft_strdup(arr[i]);
@@ -70,7 +67,7 @@ char    **ft_arrdup(char **arr)
         }
        i++;
     }
-	ft_putstr_fd("Dioboia3",1);
+	//ft_putstr_fd("Dioboia3",1);
     rtn[i] = NULL;
     return (rtn);
 }
