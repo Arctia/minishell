@@ -28,41 +28,47 @@ void	ft_execvepipe(t_hellmini  *shell)
 	***********************************************************
 					ft_fixstinpipe
 	***********************************************************
-	dealt with the in and out of command and recall ft pipeone 
+	dealt with the in and out of command and recall ft pipejunior 
 	for eventually other pipe 
 */
 
 void	ft_fixstinpipe(t_hellmini *shell, Pipe output)
 {
-	dup2(output[1],1);
+	dup2(output[1], 1);
 	close(output[0]);
 	close(output[1]);
-	ft_pipeone(shell);
+	if (shell->cmd->next->operator == NULL)
+		return ;
+	ft_pipejunior(shell);
 
 }
 
 /*
 	***********************************************************
-					ft_pipeone
+					ft_pipejunior
 	***********************************************************
 	pipe fork chek
 	maybe ft_execpipe must be bring here
 */
 
-void	ft_pipeone(t_hellmini *shell)
+void	ft_pipejunior(t_hellmini *shell)
 {
 	pid_t	pid;
 	Pipe	input;
 
-	if(pipe(input) != 0)
-		perror("failed to create pipe");
-	if ((pid = fork() < 0))
-		perror("failed to fork");
-	if (!pid)
-		ft_fixstinpipe(shell, input);
-	dup2(input[0],0);
-	close(input[0]);
-	close(input[1]);
+	if (shell->cmd->operator == '|')
+	{
+		if(pipe(input) != 0)
+			perror("failed to create pipe");
+		if ((pid = fork() < 0))
+			perror("failed to fork");
+		if (!pid)
+			ft_fixstinpipe(shell, input);
+		dup2(input[0], 0);
+		close(input[0]);
+		close(input[1]);
+	}
+	ft_execvepipe(shell);
 }
 
 /*
@@ -76,19 +82,20 @@ void	ft_pipeone(t_hellmini *shell)
 
 void	ft_pipe(t_hellmini *shell)
 {
-	pid_t pid;
+	pid_t	pid;
+	int		status;
 
-	while (shell->cmd->operator == '|' )
+
+	while (shell->cmd->operator == '|')
 	{
 		if ((pid = fork()) < 0)
 			perror("failed to fork");
 		if (pid != 0)
-			return ;
-		ft_pipeone(shell->current_command);
+			return ; //  wait??
+		ft_pipejunior(shell->current_command);
 		if (shell->cmd->next->operator=='|')
-			shell->current_command == shell->cmd->next;
-		else
-		;   //??
+			shell->current_command = shell->cmd->next->command;
+		waitpid(0, &status ,0);//? not sure if here or in ft_executor with a while loop
 	}
-	ft_execvepipe(shell);
+
 }

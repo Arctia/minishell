@@ -12,6 +12,8 @@
 
 	Pay attention to export : export a = ls
 	$a-> ls
+
+	"" '' are alredy gestite from lexer/parser
 */
 char	*ft_expander(char *str, char **env)
 {
@@ -78,11 +80,6 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 	// exit(EXIT_FAILURE);
 }
 
-// Bultin ?
-// No built in ?````
-//     Fork
-//     Find path -> execv
-
 /*
 	***********************************************************
 					FT_EXECUTOR					
@@ -100,45 +97,33 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 */
 ft_executor(t_hellmini *parser)
 {
-	int		fd[2];
 	pid_t	pid;
-	int		fd_in;
-
-	fd_in = STDIN_FILENO;
+	int		status;
 
 	while (parser->current_command)
 	{
 		if (parser->cmd->export == 1)
-			ft_expander(parser->current_command, parser->env);
+			parser->current_command = ft_expander(parser->current_command, parser->env);
 		if (parser->cmd->operator == NULL)
 		{
-			if(parser->current_command == builtin[])
-				ft_builtin();
+			if (ft_strcmp(parser->current_command, builtin[i]))
+				ft_builtin(builtin[i]);
 			else
-				ft_execve();
+				ft_execv(parser, pid);
 		}
-		//pipe(fd);
-		else if (parser->current_command == '<<')
+		else if (parser->cmd->operator == "<<" || parser->cmd->operator == "<<")
 			ft_heredoc();
-		else if (parser->current_command == '>')
+		else if (parser->cmd->operator == ">" || parser->cmd->operator == "<")
 			ft_redir();
-		else if (parser->current_command == '|')
+		else if (parser->cmd->operator == "|")
 		{
-			ft_pipe()
-			// pipe(fd);
-			// close(fd[0]);
-			// if (parser->cmd->next == NULL)
-			// 	dup2(fd[1],STDOUT_FILENO);
-			// 	ft_execv(parser->current_command,pid);
+			ft_pipe(parser);
+			// while (waitpid(0, &status ,0))
+			// 	;//? not sure if here or in ft_executor with a while loop
 
-			// // fd_in fd_out
-			// fd1 = dup(fd0);	//clone fd
-			// close(fd0);
-			// dup2(fd3,fd4);	//clone fd3 on fd4 
-			// close(fd3);//dup2 duplicate the fd so is good to close the old one
 		}
 		if(parser->cmd->next)
-			parser->current_command =parser->cmd->next;
+			parser->current_command = parser->cmd->next->command;
 		
 	}
 }

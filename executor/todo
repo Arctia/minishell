@@ -77,3 +77,65 @@ void erase(node *head, int index)
     // Free the memory allocated for the node we want to delete
     free(temp);
 }
+
+
+/*  who | awk '{print $1}' | sort | uniq -c | sort -n */
+static char *cmd0[] = { "who",                0 };
+static char *cmd1[] = { "awk",  "{print $1}", 0 };
+static char *cmd2[] = { "sort",               0 };
+static char *cmd3[] = { "uniq", "-c",         0 };
+static char *cmd4[] = { "sort", "-n",         0 };
+
+static char **cmds[] = { cmd0, cmd1, cmd2, cmd3, cmd4 };
+static int   ncmds = sizeof(cmds) / sizeof(cmds[0]);
+
+
+
+int main(int argc, char **argv)
+{
+    err_setarg0(argv[0]);
+    if (argc == 1)
+    {
+        /* Run the built in pipe-line */
+        exec_pipeline(ncmds, cmds); 
+    }
+    else
+    {
+        /* Run command line specified by user */
+        exec_arguments(argc, argv);
+    }
+    corpse_collector();
+    return(0);
+}
+
+// int main (int argc, char **argv, char ** envp)
+// {
+// 	t_hellmini seashell;
+// 	char *pippo;
+
+// 	seashell.env = ft_arrdup(envp);
+// 	seashell.current_command = "ls";
+// 	pippo = ft_append("usr/bin", &seashell);
+
+// 	printf("path is : %s",pippo);
+
+
+// 	// ft_getpath(&seashell);
+
+// 	// exp_tkn("$USER",seashell.env);
+
+// 	exit(0);
+// }
+
+
+			// pipe(fd);
+			// close(fd[0]);
+			// if (parser->cmd->next == NULL)
+			// 	dup2(fd[1],STDOUT_FILENO);
+			// 	ft_execv(parser->current_command,pid);
+
+			// // fd_in fd_out
+			// fd1 = dup(fd0);	//clone fd
+			// close(fd0);
+			// dup2(fd3,fd4);	//clone fd3 on fd4 
+			// close(fd3);//dup2 duplicate the fd so is good to close the old one
