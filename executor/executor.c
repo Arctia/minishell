@@ -15,6 +15,7 @@
 
 	"" '' are alredy gestite from lexer/parser
 */
+
 char	*ft_expander(char *str, char **env)
 {
 	int	i;
@@ -95,6 +96,7 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 
 	maybe wrong use of perror
 */
+
 ft_executor(t_hellmini *parser)
 {
 	pid_t	pid;
@@ -111,8 +113,8 @@ ft_executor(t_hellmini *parser)
 			else
 				ft_execv(parser, pid);
 		}
-		else if (parser->cmd->operator == "<<" || parser->cmd->operator == "<<")
-			ft_heredoc();
+		else if (parser->cmd->operator == "<<" || parser->cmd->operator == ">>")
+			ft_heredoc(parser);
 		else if (parser->cmd->operator == ">" || parser->cmd->operator == "<")
 			ft_redir();
 		else if (parser->cmd->operator == "|")

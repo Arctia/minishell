@@ -1,6 +1,6 @@
 #include "executor.h"
 
-typedef int	Pipe[2];
+// typedef int	Pipe[2];
 
 /*
 	***********************************************************
@@ -12,7 +12,7 @@ typedef int	Pipe[2];
 void	ft_execvepipe(t_hellmini  *shell)
 {
 	char	*path;
-	char	**arg; //array[4] tt a null e metto dentro i cmd che mi servono
+	char	**arg;
 	char	**env;
 
 	arg = ft_listtomatrix(shell->cmd, shell);
@@ -68,6 +68,8 @@ void	ft_pipejunior(t_hellmini *shell)
 		close(input[0]);
 		close(input[1]);
 	}
+	// waitpid(0, &status ,0);	//? not sure if here or in ft_executor with a while loop or in ft pipe
+
 	ft_execvepipe(shell);
 }
 
@@ -86,7 +88,7 @@ void	ft_pipe(t_hellmini *shell)
 	int		status;
 
 
-	while (shell->cmd->operator == '|')
+	while (shell->cmd->operator == '|' && shell->cmd->next->operator == '|' )	// check it
 	{
 		if ((pid = fork()) < 0)
 			perror("failed to fork");
@@ -95,7 +97,7 @@ void	ft_pipe(t_hellmini *shell)
 		ft_pipejunior(shell->current_command);
 		if (shell->cmd->next->operator=='|')
 			shell->current_command = shell->cmd->next->command;
-		waitpid(0, &status ,0);//? not sure if here or in ft_executor with a while loop
+		waitpid(0, &status ,0);	//? not sure if here or in ft_executor with a while loop
 	}
 
 }

@@ -11,6 +11,9 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <dirent.h>
+# include <fcntl.h> //need it in master
+
+
 
 // Constant declarations
 # define NAME_MAX 255
