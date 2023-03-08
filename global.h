@@ -17,6 +17,16 @@
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
+// Operator presence
+# define PIPE 0
+# define SQUOTE 1
+# define DQUOTE 2
+# define MQUOTE 3
+# define REDIN 4
+# define REDOUT 5
+# define REDAPP 6
+# define HERDOC 7
+
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
@@ -37,7 +47,10 @@ typedef struct s_hellmini
 //soprattutto in presenza di < > << >>)
 typedef struct s_command
 {
-	char				**words_operators;
+	char				**tokens;
+	char				*str;
+	int					spc[8];
+
 	char				*command;
 	char				**flags;
 	char				**arguments;
@@ -46,7 +59,6 @@ typedef struct s_command
 
 	struct s_command 	*next;
 	struct s_command 	*prev;
-
 	t_hellmini 			*shell;
 }	t_command;
 
