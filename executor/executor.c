@@ -96,7 +96,6 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 
 	maybe wrong use of perror
 */
-
 ft_executor(t_hellmini *parser)
 {
 	pid_t	pid;
