@@ -9,15 +9,15 @@
 	different ft_execv without fork i don't know if needed
 */
 
-void	ft_execvepipe(t_hellmini  *shell)
+void	ft_execvepipe(t_hellmini *shell)
 {
 	char	*path;
 	char	**arg;
 	char	**env;
 
-	arg = ft_listtomatrix(shell->cmd, shell);
+	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
-	if (execve(path,arg,env) == -1) 
+	if (execve(path, arg, env) == -1) 
 		perror("execution failed");
 	ft_freestrarr(arg);
 	free(path);

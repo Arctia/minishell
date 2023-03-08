@@ -19,34 +19,48 @@
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
+// Operator presence
+# define PIPE	0
+# define SQUOTE	1
+# define DQUOTE	2
+# define MQUOTE	3
+# define REDIN	4
+# define REDOUT	5
+# define REDAPP	6
+# define HERDOC	7
+# define $$$$$$ 8
+
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
-	char 		**env;
+	char 				**env;
 
-	int			*exit_status;
-	struct s_command 	*cmd;
-	char	*current_command;
+	int					exit_status;
+	char				*input;
+	struct s_command 	*current_cmd;
+	int					mc_pipes;
+	int					mc_quotes;
+	int					mc_wquotes;
 
-
-    pid_t 		pid; // maybe 
+//	pid_t				pid; // maybe
 }           t_hellmini;
 
+//words_operators e'la prima splittata(" ")dell'input, ergo la prima tokenizzazione;
+//potrebbe servirne una ulteriore per semplificare la lettura del codice(in generale ma
+//soprattutto in presenza di < > << >>)
 typedef struct s_command
 {
-	char	*command;		//ls	//ls 	//cd
-	char	**flags;		//la	//la	
-	char	**arguments;					//..
+	char				**tokens;
+	char				*str;
+	int					spc[8];
+
+	char				*command;
+	char				**flags;
+	char				**arguments;
+
 	int		ret;
-	char	*operator;			//|		//>		//>>
-	int		export;
 
-
-
-	struct s_command	*next;				//cd
-	struct s_command *prev;
-
-	struct s_hellmini *shell;
+	struct s_command 	*next;
+	struct s_command 	*prev;
+	t_hellmini 			*shell;
 }	t_command;
-
-#endif

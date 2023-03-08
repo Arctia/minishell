@@ -10,7 +10,7 @@
 	know how to do
 */
 
-char	**ft_listtomatrix(t_command *cmd, t_hellmini *shell)
+char	**ft_listtomatrix(t_hellmini *shell)
 {
 	char	**arg;
 	int		i;
@@ -19,20 +19,20 @@ char	**ft_listtomatrix(t_command *cmd, t_hellmini *shell)
 	arg = NULL;
 	i = 1;
 	j = 0;
-	while (cmd->arguments[j++])
+	while (shell->current_cmd->arguments[j++])
 		i++;
 	j = 0;
-	while (cmd->flags[j++])
+	while (shell->current_cmd->flags[j++])
 		i++;
 	arg = ft_calloc(sizeof(char *), i);
-	arg[0] = ft_strdup(shell->current_command);
-	i = 1; 
+	arg[0] = ft_strdup(shell->current_cmd->command);
+	i = 1;
 	j =	-1;
-	while (cmd->flags[++j])
-		arg[i++] = ft_strdup(cmd->flags[j]);
+	while (shell->current_cmd->flags[++j])
+		arg[i++] = ft_strdup(shell->current_cmd->flags[j]);
 	j = -1;
-	while (cmd->arguments[++j])
-		arg[i++] = ft_strdup(cmd->arguments[j]);
+	while (shell->current_cmd->arguments[++j])
+		arg[i++] = ft_strdup(shell->current_cmd->arguments[j]);
 	arg[i++] = NULL;
 	return (arg);
 }
@@ -50,16 +50,16 @@ char	*ft_append(char *path, t_hellmini *shell)
 	char	*ret;
 	char	*retaux;
 
-	ret = malloc(sizeof(char ) * (ft_strlen(path) + 
-			ft_strlen(shell->current_command)) + 2);
+	ret = malloc(sizeof(char ) * (ft_strlen(path)
+			+ ft_strlen(shell->current_cmd->command)) + 2);
 	if (!ret)
 		return (NULL);
 	retaux = ret;
 	while (*path)
 		*ret++ = *path++;
 	*ret++ = '/';
-	while (*shell->current_command)
-		*ret++ = *shell->current_command++;
+	while (*shell->current_cmd->command)
+		*ret++ = *shell->current_cmd->command++;
 	*ret++ = '\0';
 	return (retaux);
 }
@@ -108,9 +108,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	struct dirent	*entry;
 	char			**path;
 	char			*temp;
-	// int				i;
 
-	i = 0;
 	path = ft_getpath(shell);
 	while (path[i])
 	{
@@ -118,7 +116,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 		entry = readdir(dir);
 		while (entry)
 		{
-			if (!ft_strcmp(entry->d_name, shell->current_command))
+			if (!ft_strcmp(entry->d_name, shell->current_cmd->command))
 			{
 				closedir(dir);
 				temp = ft_append(path[i], shell);
@@ -132,3 +130,4 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	}
 	return (NULL);
 }
+

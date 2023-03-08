@@ -60,7 +60,7 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 	char	**env;
 	int		status;
 
-	arg = ft_listtomatrix(shell->cmd, shell);
+	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
 	pid = fork();
 	if (!pid)
@@ -101,30 +101,34 @@ ft_executor(t_hellmini *parser)
 	pid_t	pid;
 	int		status;
 
-	while (parser->current_command)
+	while (parser->current_cmd->command)
 	{
-		if (parser->cmd->export == 1)
-			parser->current_command = ft_expander(parser->current_command, parser->env);
-		if (parser->cmd->operator == NULL)
+		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[$$$$$$])
+			parser->current_cmd->command = ft_expander(parser->current_cmd->command, parser->env);
+		if (parser->current_cmd->next == NULL)
 		{
-			if (ft_strcmp(parser->current_command, builtin[i]))
+			if (ft_strcmp(parser->current_cmd->command, builtin[i]))
 				ft_builtin(builtin[i]);
 			else
 				ft_execv(parser, pid);
 		}
-		else if (parser->cmd->operator == "<<" || parser->cmd->operator == ">>")
+		else if (parser->current_cmd->spc[REDIN])
+			ft_less(parser);
+		else if (parser->current_cmd->spc[REDOUT])
+			ft_redir(parser);
+		else if (parser->current_cmd->spc[REDAPP])
+			ft_moremore(parser);
+		else if (parser->current_cmd->spc[HERDOC])
 			ft_heredoc(parser);
-		else if (parser->cmd->operator == ">" || parser->cmd->operator == "<")
-			ft_redir();
-		else if (parser->cmd->operator == "|")
+		else if (parser->current_cmd->spc[PIPE])
 		{
 			ft_pipe(parser);
 			// while (waitpid(0, &status ,0))
 			// 	;//? not sure if here or in ft_executor with a while loop
 
 		}
-		if(parser->cmd->next)
-			parser->current_command = parser->cmd->next->command;
+		if(parser->current_cmd->next)
+			parser->current_cmd->command = parser->current_cmd->next->command;
 		
 	}
 }
