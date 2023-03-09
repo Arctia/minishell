@@ -17,40 +17,87 @@
 // {
 
 // }
+// void	here_doc_handler(char* str)
+// {
 
+// }
 int	prompt_loop(t_hellmini *shell)
 {
-//signal
+	// char *tmp_buf;
+
+	// tmp_buf = ft_strdup("\033[1;31mminisHELL$:\033[0m exit\0");
 	while(1)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, sigquit_handler);
+
+		signal(SIGINT, ft_sigs_handler);
+		signal(SIGQUIT, SIG_IGN);
 		//sigquit_macro(SIGQUIT, shell);
 		shell->input = readline(PROMPT);
 		if (!shell->input)
 		{
-			shell->input = NULL;
+			{
+			//ft_suppress_output();
+			//printf("\033[1;31mminisHELL$:\033[0m exit");
+			//write(1,"\033[1;31mminisHELL$:\033[0m \033[0;12f exit\0", 37);
+			//ft_suppress_output();
+			//write(1,"ulula\n", 7);
+			write(1, "\033[2J", 6);
 
-			//printf("\033[1;31mminisHELL$:\033[0m exit\n");
-			//printf("exit");
+			write(1, "\033[13Cexit", 5);
+			//ft_putstr_fd("\033[0;12f exit", STDOUT_FILENO);
+			// rl_replace_line("\033[1;31mminisHELL$:\033[0m \033[0;12f exit", 0);
+			//rl_replace_line("\033[0;13f \033 exit", 0);
+			//readline(tmp_buf);
+			//rl_redisplay();
+			}
 			exit(0);
 		}
-//			return (0 * write(1, "exit\n", 5));
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
-
-		//command_init(&shell);
-		// if (!ft_strncmp(shell->input, "exit\n", 5))
-		// {
-		// 	//ft_free_structs();
-		// 	exit(0);
-		// }
-	//	exp_tkn("$user", shell->env);
 	}
 
 	//rip_and_tear(shell->current_cmd, shell->current_cmd->command);
 	return (0);
 }
+// int	prompt_loop(t_hellmini *shell)
+// {
+// //signal
+// 	while(1)
+// 	{
+// 		// signal(SIGINT, sigint_handler);
+// 		// signal(SIGQUIT, sigquit_handler);
+// 		signal(SIGINT, ft_sigs_handler);
+// 		signal(SIGQUIT, ft_sigs_handler);
+// 		//sigquit_macro(SIGQUIT, shell);
+// 		shell->input = readline(PROMPT);
+// 		if (!shell->input)
+// 		{
+// 			// rl_replace_line("\033[1;31mminisHELL$:\033[0m exit\n", 0);
+// 			// shell->input = ft_strdup("exit");
+
+// 			// rl_redisplay();
+// 			// printf("\033[1;31mminisHELL$:\033[0m exit\n");
+// 			rl_replace_line("exit", 0);
+// 			//rl_redisplay();
+// 			//write(1, "exit", 4);
+// 			exit(0);
+// 		}
+// //			return (0 * write(1, "exit\n", 5));
+// 		if (ft_strncmp(shell->input, "", 1))
+// 			add_history(shell->input);
+
+// 		//command_init(&shell);
+// 		// if (!ft_strncmp(shell->input, "exit\n", 5))
+// 		// {
+// 		// 	//ft_free_structs();
+// 		// 	exit(0);
+// 		// }
+// 	//	exp_tkn("$user", shell->env);
+// 	}
+
+// 	//rip_and_tear(shell->current_cmd, shell->current_cmd->command);
+// 	return (0);
+// }
 
 void	init_shell(t_hellmini *shell)
 {
@@ -64,7 +111,7 @@ void	init_shell(t_hellmini *shell)
 	shell->mc_wquotes = 0;
 	shell->current_cmd = NULL;
 	//shell->pid = 0;
-	printf("Shell initialized\n");
+	//printf("Shell initialized\n");
 }
 
 int	main(int argc, char **argv, char **env)

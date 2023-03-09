@@ -3,9 +3,10 @@ NAME=minishell
 
 CC=gcc
 
-FLAGS=-Wall -Werror -Wextra
+FLAGS=-Wall -Werror -Wextra -g
 
-SRCS=	./main/signals.c \
+SRCS=	./main/signals2_0.c \
+		./main/signals.c \
 		./main/tokenizer.c \
 		./main/expander.c \
 		./main/env_handlers.c \
@@ -19,7 +20,7 @@ OBJS=$(SRCS:.c=.o)
 LIBFT=./libft/libft.a
 
 READLINE = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib \
-				-I$(HOME)/.brew/opt/readline/include \
+				-I$(HOME)/.brew/opt/readline/include
 
 $(NAME): $(OBJS) $(LIBFT)
 		$(CC) $(FLAGS) $(SRCS) $(LIBFT) -o $(NAME) $(READLINE)

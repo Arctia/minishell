@@ -31,6 +31,7 @@ char *exp_tkn(char *str, char **env)
 	new_token[k] = '\0';
 	return (new_token);
 }
+
 void    free_arr(char **split_arr)
 {
     int i;

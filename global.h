@@ -13,12 +13,17 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 
+//per far girare sigaction
+#define _POSIX_C_SOURCE 199309L
+
 // Constant declarations
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
 # define PROMPT "\033[1;31mminisHELL$:\033[0m "
 
+//per far funzionare rl_replace_lline
+extern void	rl_replace_line(const char *text, int clear_undo);
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
@@ -71,4 +76,6 @@ void					ft_suppress_output(void);
 void					sigint_handler(int sig);
 void					sigquit_handler(int sig);
 void					sigquit_macro(int sig, t_hellmini *shell);
+void					*ft_handler(int sig);
+void					ft_sigs_handler(int sig);
 #endif
