@@ -18,14 +18,15 @@
 
 char	*ft_expander(char *str, char **env)
 {
-	int	i;
-	int	j;
-	int	k;
+	int		i;
+	int		j;
+	int		k;
 	char	*new_token;
+
 	i = 0;
 	j = 0;
 	if (!str || !env || !ft_strlen(str))
-		return(NULL);
+		return (NULL);
 	while (ft_strncmp(str, env[i], ft_strlen(str)))
 		i++;
 	while (env[i][j] != '=')
@@ -34,7 +35,7 @@ char	*ft_expander(char *str, char **env)
 	if (!new_token)
 		return (NULL);
 	k = 0;
-	while(env[i])
+	while (env[i])
 	{
 		new_token[k++] = env[i][j++];
 		//write for debug only
@@ -51,12 +52,14 @@ char	*ft_expander(char *str, char **env)
 	working 
 	l'ultimo else mi è un po' oscuro 
 	we have to decide if do the fork in ft execve or in executor
+
+	add relative path execution
 */
 
-void	ft_execv(t_hellmini  *shell, pid_t pid)
+void	ft_execv(t_hellmini *shell, pid_t pid)
 {
 	char	*path;
-	char	**arg; //array[4] tt a null e metto dentro i cmd che mi servono
+	char	**arg; /* array[4] tt a null e metto dentro i cmd che mi servono */
 	char	**env;
 	int		status;
 
@@ -65,18 +68,18 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 	pid = fork();
 	if (!pid)
 	{
-		if (execve(path,arg,env) == -1) 
+		if (execve(path, arg, env) == -1)
 			perror("execution failed");
 	}
 	else if (pid < 0)
-			perror("fork failed");
+		perror("fork failed");
 	else
 	{
 		waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			waitpid(pid, &status, WUNTRACED);
 	}
-	ft_freestrarr(arg);
+	ft_free_cmatrix(arg);
 	free(path);
 	// exit(EXIT_FAILURE);
 }
@@ -86,26 +89,26 @@ void	ft_execv(t_hellmini  *shell, pid_t pid)
 					FT_EXECUTOR					
 	***********************************************************
 	the name is parser because it come from Parser
-	is pseudocode (i commenti sparsi nel codice sono temporanei
-	man mano che completo il codice li levo)
-
-	== should be a strcmp
+	
+	i've to find the rgiht way to execute all command my if is
+	good only for simple command
+	
 
 	maybe i need fd_in and fd_out in the command struct to swap 
-	fd between pipe
+	fd between pipe or maybe not
 
-	maybe wrong use of perror
 */
-ft_executor(t_hellmini *parser)
+void	ft_executor(t_hellmini *parser)
 {
 	pid_t	pid;
 	int		status;
 
 	while (parser->current_cmd->command)
 	{
-		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[$$$$$$])
-			parser->current_cmd->command = ft_expander(parser->current_cmd->command, parser->env);
-		if (parser->current_cmd->next == NULL)
+		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[CASH])
+			parser->current_cmd->command
+				= ft_expander(parser->current_cmd->command, parser->env);
+		if (parser->current_cmd->next == NULL)	//
 		{
 			if (ft_strcmp(parser->current_cmd->command, builtin[i]))
 				ft_builtin(builtin[i]);
@@ -125,10 +128,9 @@ ft_executor(t_hellmini *parser)
 			ft_pipe(parser);
 			// while (waitpid(0, &status ,0))
 			// 	;//? not sure if here or in ft_executor with a while loop
-
 		}
-		if(parser->current_cmd->next)
-			parser->current_cmd->command = parser->current_cmd->next->command;
-		
+		// ft_execv(parser, pid); //see function comment maybe every single exceptio call his own ft_sexecv
+		if (parser->current_cmd->next)
+			parser->current_cmd = parser->current_cmd->next;
 	}
 }

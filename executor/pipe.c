@@ -17,9 +17,9 @@ void	ft_execvepipe(t_hellmini *shell)
 
 	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
-	if (execve(path, arg, env) == -1) 
+	if (execve(path, arg, env) == -1)
 		perror("execution failed");
-	ft_freestrarr(arg);
+	ft_free_cmatrix(arg);
 	free(path);
 	// exit(EXIT_FAILURE);
 }
@@ -37,10 +37,9 @@ void	ft_fixstinpipe(t_hellmini *shell, Pipe output)
 	dup2(output[1], 1);
 	close(output[0]);
 	close(output[1]);
-	if (shell->cmd->next->operator == NULL)
+	if (shell->current_cmd->next->spc[PIPE] == 0)
 		return ;
 	ft_pipejunior(shell);
-
 }
 
 /*
@@ -56,11 +55,12 @@ void	ft_pipejunior(t_hellmini *shell)
 	pid_t	pid;
 	Pipe	input;
 
-	if (shell->cmd->operator == '|')
+	if (shell->current_cmd->spc[PIPE])
 	{
-		if(pipe(input) != 0)
+		if (pipe(input) != 0)
 			perror("failed to create pipe");
-		if ((pid = fork() < 0))
+		pid = fork();
+		if ((pid < 0))
 			perror("failed to fork");
 		if (!pid)
 			ft_fixstinpipe(shell, input);
@@ -69,7 +69,6 @@ void	ft_pipejunior(t_hellmini *shell)
 		close(input[1]);
 	}
 	// waitpid(0, &status ,0);	//? not sure if here or in ft_executor with a while loop or in ft pipe
-
 	ft_execvepipe(shell);
 }
 
@@ -87,17 +86,17 @@ void	ft_pipe(t_hellmini *shell)
 	pid_t	pid;
 	int		status;
 
-
-	while (shell->cmd->operator == '|' && shell->cmd->next->operator == '|' )	// check it
+	while (shell->current_cmd->spc[PIPE] 
+		&& shell->current_cmd->next->spc[PIPE])	// check it
 	{
-		if ((pid = fork()) < 0)
+		pid = fork();
+		if (pid < 0)
 			perror("failed to fork");
 		if (pid != 0)
-			return ; //  wait??
-		ft_pipejunior(shell->current_command);
-		if (shell->cmd->next->operator=='|')
-			shell->current_command = shell->cmd->next->command;
-		waitpid(0, &status ,0);	//? not sure if here or in ft_executor with a while loop
+			return ;	//  wait??
+		ft_pipejunior(shell);
+		if (shell->current_cmd->spc[PIPE])
+			shell->current_cmd = shell->current_cmd->next;
+		waitpid(0, &status, 0);		//? not sure if here or in ft_executor with a while loop
 	}
-
 }

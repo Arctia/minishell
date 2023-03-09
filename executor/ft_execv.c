@@ -27,7 +27,7 @@ char	**ft_listtomatrix(t_hellmini *shell)
 	arg = ft_calloc(sizeof(char *), i);
 	arg[0] = ft_strdup(shell->current_cmd->command);
 	i = 1;
-	j =	-1;
+	j = -1;
 	while (shell->current_cmd->flags[++j])
 		arg[i++] = ft_strdup(shell->current_cmd->flags[j]);
 	j = -1;
@@ -51,7 +51,7 @@ char	*ft_append(char *path, t_hellmini *shell)
 	char	*retaux;
 
 	ret = malloc(sizeof(char ) * (ft_strlen(path)
-			+ ft_strlen(shell->current_cmd->command)) + 2);
+				+ ft_strlen(shell->current_cmd->command)) + 2);
 	if (!ret)
 		return (NULL);
 	retaux = ret;
@@ -120,7 +120,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 			{
 				closedir(dir);
 				temp = ft_append(path[i], shell);
-				ft_freestrarr(path);
+				ft_free_cmatrix(path);
 				return (temp);
 			}
 				entry = readdir(dir);
@@ -130,4 +130,3 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	}
 	return (NULL);
 }
-

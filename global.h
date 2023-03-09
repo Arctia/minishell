@@ -13,13 +13,10 @@
 # include <dirent.h>
 # include <fcntl.h> //need it in master
 
-
-
-// Constant declarations
+/*Constant declarations*/
 # define NAME_MAX 255
 # define PATH_MAX 1024
-
-// Operator presence
+/*Operator presence*/
 # define PIPE	0
 # define SQUOTE	1
 # define DQUOTE	2
@@ -28,26 +25,26 @@
 # define REDOUT	5
 # define REDAPP	6
 # define HERDOC	7
-# define $$$$$$ 8
-
-// Struct declarations --> Every array/matrix should be null terminated
+# define CASH 8
+/*Struct declarations --> Every array/matrix should be null terminated*/
 typedef struct s_hellmini
 {
-	char 				**env;
+	char				**env;
 
 	int					exit_status;
 	char				*input;
-	struct s_command 	*current_cmd;
+	struct s_command	*current_cmd;
 	int					mc_pipes;
 	int					mc_quotes;
 	int					mc_wquotes;
-
-//	pid_t				pid; // maybe
-}           t_hellmini;
-
-//words_operators e'la prima splittata(" ")dell'input, ergo la prima tokenizzazione;
-//potrebbe servirne una ulteriore per semplificare la lettura del codice(in generale ma
-//soprattutto in presenza di < > << >>)
+}				t_hellmini;
+/*
+	words_operators e'la prima splittata(" ")dell'input,
+	ergo la prima tokenizzazione;
+	potrebbe servirne una ulteriore per semplificare 
+	la lettura del codice(in generale ma
+	soprattutto in presenza di < > << >>)
+*/
 typedef struct s_command
 {
 	char				**tokens;
@@ -58,7 +55,7 @@ typedef struct s_command
 	char				**flags;
 	char				**arguments;
 
-	int		ret;
+	int					ret;
 
 	struct s_command 	*next;
 	struct s_command 	*prev;
