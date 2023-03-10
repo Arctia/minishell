@@ -17,6 +17,17 @@
 # define NAME_MAX 255
 # define PATH_MAX 1024
 
+// Operator presence
+# define PIPE 0
+# define SQUOTE 1
+# define DQUOTE 2
+# define MQUOTE 3
+# define REDIN 4
+# define REDOUT 5
+# define REDAPP 6
+# define HERDOC 7
+# define CASH 8
+
 // Struct declarations --> Every array/matrix should be null terminated
 typedef struct s_hellmini
 {
@@ -24,7 +35,7 @@ typedef struct s_hellmini
 
 	int					exit_status;
 	char				*input;
-	t_command 	        *com;
+	struct s_command	*current_cmd;
 	int					mc_pipes;
 	int					mc_quotes;
 	int					mc_wquotes;
@@ -38,6 +49,8 @@ typedef struct s_hellmini
 typedef struct s_command
 {
 	char				**words_operators;
+	char				*str;
+	int					spc[9];
 	char				*command;
 	char				**flags;
 	char				**arguments;
@@ -58,15 +71,10 @@ typedef struct s_command
 //char					**rip_and_tear(t_command *command, char *str);
 
 //lexer
-int	    check_argument(char *line, int i, char chr);
-int     check_closures(char *line, int i, t_command *com);
-int	    lexer(char *line, t_command *com);
-char	lexer_start(char *line, t_command *com);
-int     lexer_init(char *line);
+int     lexer_init(t_hellmini *shell);
 //lexer_splitter
-void	lexer_error(char *message, t_command *com);
-int	    split_operator_line(char *line);
-char	*split_operator(char *line);
+void	lexer_error(char *message);
+char	*split_operator(char *line, int *ff);
 char	*split_line(char *line);
 
 

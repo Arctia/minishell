@@ -1,6 +1,17 @@
 #include "global.h"
 
-int	check_argument(char *line, int i, char chr) //second part and actual working function of "check_closure" below
+
+int	ft_strlen(char *str)
+{
+	int i = 0;
+
+	while(str[i])
+		str[i++];
+	return (i);
+}
+
+//second part and actual working function of "check_closure" below
+int	check_argument(char *line, int i, char chr)
 {
 	int	flag;
 
@@ -16,19 +27,24 @@ int	check_argument(char *line, int i, char chr) //second part and actual working
 	return (i);
 }
 
-int check_closures(char *line, int i, t_command *com) //makes sure no quotes are weirdly innested into each other, redirecting to "check argument"
+//makes sure no quotes are weirdly innested into each other, redirecting to "check argument"
+int check_closures(char *line, int i)
 {
 	int	quotes;
+	char	q;
 
 	quotes = 1;
 	while (line[i] != 0)
 	{
+		q = line[i];
+		// maybe need a rewrite
+
+
 		if (line[i] == '\"')
 		{
 			i = check_argument(line, i + 1, '\"');
 			if (i == -1)
 				return (-1);
-
 		}
 		else if (line[i] == '\'')
 		{
@@ -40,93 +56,101 @@ int check_closures(char *line, int i, t_command *com) //makes sure no quotes are
 	}
 }
 
-int	check_quotes(char *line, int i, t_command *com) //makes sure to ignore any operator inside quotes.
+//makes sure to ignore any operator inside quotes.
+int	check_quotes(char *line, int i, t_command *com) 
 {
-	char	*quote;
+	char	quote;
 
-	quote == line[i];
+	quote = line[i];
 	while (line[i++] != quote)
 	{
 		if (quote == '\"' && line[i] == '$')
-			com->exp = 1;
+			com->spc[CASH] = 1;
 		i++;
 	}
 	return (i);
 }
 
-int	lexer(char *line, t_command *com) //searches and split following commands from the line on the next command argument
+//searches and split following commands from the line on the next command argument
+void	lexer_default(char *line, t_command *cmd)
 {
-	int		i;
+	t_command *tmp;
+	int	i;
 
 	i = 0;
-	while (line[i] != 0)
+	while (1)
 	{
-		if (line[i] == '\"' || line[i] == '\'')
-		i = check_quotes(line, i, com);
-		if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+		if (cmd == NULL)
 		{
-			com->next = (t_command*)malloc(sizeof(t_command));
-			if (!com->next)
-				return (-1);
-			com->command = (char *)malloc(sizeof(split_operator(line)));
-			com->next->command = split_operator(line);
-			line = split_line(line);
-			i = 0;
+			cmd = (t_command *) malloc(sizeof(t_command));
+			if (!cmd)
+				return ;
+			cmd->next = NULL;
+			tmp->next = cmd;
+			cmd->prev = tmp;
 		}
+		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
+		{	
+			cmd->str = split_operator(line, &i);
+			tmp = cmd;
+			cmd = cmd->next;
+		}
+		if (line[i] == '\0')
+			break ;
+		i++;
 	}
-	return (0);
 }
 
-char	lexer_start(char *line, t_command *com) //starts splitting the first command from the line on the current command argument of the struct.
+void	print_commands(t_command *cmd)
 {
-	int		i;
-	int		flag;
+	t_command *tmp;
 
-	i = 0;
-	flag = 0;
-	while (line[i] != 0 || flag != 1)
+	tmp = cmd;
+
+	while (tmp != NULL && tmp)
 	{
-		if (line[i] == '\"' || line[i] == '\'')
-		i = check_quotes(line, i, com);
-		if (line[i] == '|' || line[i] == '<' || line[i] == '>')
-		{
-			com->current_cmd = (t_command*)malloc(sizeof(t_command));
-			if (!com->current_cmd)
-				break ;
-			
-			com->current_cmd = split_operator(line);
-			line = split_line(line);
-			flag = 1;
-		}
+		printf("%s\n", tmp->str);
+		tmp = tmp->next;
 	}
-	return (line);
 }
 
-int lexer_init(t_hellmini *shell) //main function and of the lexer process, it initializes the struct, checks unclosed quotes.
+//main function and of the lexer process, it initializes the struct, checks unclosed quotes.
+int lexer_init(t_hellmini *shell)
 {
-	char		*line
+	char		*line;
 	int			i;
-	t_command	*com;
 
 	line = shell->input;
 	i = 0;
-	shell->com = (t_command*)malloc(sizeof(t_command));
-	if (!com)
-		return (-1);
-	if (check_closures(line, i, com) != 0)
+	if (check_closures(line, i) != 0)
 	{
-		lexer_error("unclosed quotes.", com);
+		lexer_error("unclosed quotes.");
 		return (-1);
 	}
-	line = lexer_start(line, com);
-	if (lexer(line, com) != 0)
+	shell->current_cmd = (t_command *)malloc(sizeof(t_command));
+	if (!(shell->current_cmd))
 		return (-1);
-	free(line);
+	lexer_default(line, shell->current_cmd);
+	print_commands(shell->current_cmd);
 	return (0);
 }
 
-int main(int argc, char **argv)		//testing main, remove after testing
+
+//testing main, remove after testing
+int main(int argc, char **argv)
 {
-	lexer_init(argv[1]);
+	t_hellmini shell;
+	int	i;
+
+	shell.input = malloc(sizeof(char) * ft_strlen(argv[1]) + 1);
+	while (i < ft_strlen(argv[1]))
+	{
+		shell.input[i] = argv[1][i];
+		i++;
+	}
+	shell.input[i] = '\0';
+
+	lexer_init(&shell);
+	
 	return (0);
 }
