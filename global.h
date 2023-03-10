@@ -8,13 +8,15 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <termios.h>
+# include <sys/ioctl.h>
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 
 //per far girare sigaction
-#define _POSIX_C_SOURCE 199309L
+//#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200809L
 
 // Constant declarations
 # define NAME_MAX 255

@@ -38,17 +38,18 @@ int	prompt_loop(t_hellmini *shell)
 			{
 			//ft_suppress_output();
 			//printf("\033[1;31mminisHELL$:\033[0m exit");
-			//write(1,"\033[1;31mminisHELL$:\033[0m \033[0;12f exit\0", 37);
-			//ft_suppress_output();
-			//write(1,"ulula\n", 7);
-			write(1, "\033[2J", 6);
+			//il write subito sotto MEZZO funziona
+			//write(1,"\033[1;31mminisHELL$:\033[0m exit\0", 29);
 
-			write(1, "\033[13Cexit", 5);
+			write(1, "\033[0;12Cexit", 12);
 			//ft_putstr_fd("\033[0;12f exit", STDOUT_FILENO);
-			// rl_replace_line("\033[1;31mminisHELL$:\033[0m \033[0;12f exit", 0);
-			//rl_replace_line("\033[0;13f \033 exit", 0);
-			//readline(tmp_buf);
-			//rl_redisplay();
+			//rl_line_buffer[0] = '\0';
+			// write(1, "");
+			//ft_putstr_fd("exit \033[11K\r", 11);
+			//ft_putstr_fd("\033[0K\r exit", STDOUT_FILENO);
+			//write(1, "\u001b[2K" , 0);
+			//rl_replace_line("exit", 5);
+			rl_redisplay();
 			}
 			exit(0);
 		}
