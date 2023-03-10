@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arctia <arctia@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vgavioli <vgavioli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/30 16:02:29 by vgavioli          #+#    #+#             */
-/*   Updated: 2022/11/01 20:40:58 by arctia           ###   ########.fr       */
+/*   Updated: 2023/03/08 16:07:01 by vgavioli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,7 @@ void	ft_free_imatrix(int **mtx);
 long	ft_pow(int num, int n);
 int		ft_module(int n);
 int		ft_sqrt(long num);
+int		ft_isspace(char c);
+int		ft_isnotspace(char c);
 
 #endif
