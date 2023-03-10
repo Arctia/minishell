@@ -72,24 +72,31 @@ char	*ft_append(char *path, t_hellmini *shell)
 	path da freeare
 */
 
-char	**ft_getpath(t_hellmini *shell)
+char	**ft_getpath(t_hellmini *shell, int i)
 {
-	int		i;
+	char	**ritemp;
 	char	**path;
 	char	*temp;
+	char	cwd[MAXPATHLEN];
 
 	i = 0;
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		printf("Current working dir: %s\n", cwd);
+	else
+		perror("getcwd() error");
 	while (shell->env[i])
 	{
 		if (ft_strncmp("PATH", shell->env[i], 4) == 0)
 		{
 			temp = ft_strtrim(shell->env[i], "PATH=");
-			path = ft_split(temp, ':');
+			ritemp = ft_split(temp, ':');
 			free(temp);
 			break ;
 		}
 		i++;
 	}
+	path = ft_addlinetomatrix(ritemp, cwd);
+	free(ritemp);
 	return (path);
 }
 
@@ -109,7 +116,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	char			**path;
 	char			*temp;
 
-	path = ft_getpath(shell);
+	path = ft_getpath(shell, 0);
 	while (path[i])
 	{
 		dir = opendir(path[i]);
