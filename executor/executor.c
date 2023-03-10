@@ -13,36 +13,66 @@
 	Pay attention to export : export a = ls
 	$a-> ls
 
-	"" '' are alredy gestite from lexer/parser
+	"" '' are alredy gestite from lexer/parser?
 */
 
 char	*ft_expander(char *str, char **env)
 {
-	int		i;
-	int		j;
-	int		k;
-	char	*new_token;
-
+	int i;
+	int j;
+	int k;
+	char    *new_token;
 	i = 0;
 	j = 0;
 	if (!str || !env || !ft_strlen(str))
-		return (NULL);
-	while (ft_strncmp(str, env[i], ft_strlen(str)))
+		return(NULL);
+	while (!((ft_strncmp(str, env[i], ft_strlen(str))) == 0))
 		i++;
-	while (env[i][j] != '=')
+	while(env[i][j] != '=')
 		j++;
-	new_token = (char *)malloc(ft_strlen(env[i] + 2 - j));
+	j++;
+	new_token = (char *)malloc((ft_strlen(env[i]) + 2 - j));
 	if (!new_token)
 		return (NULL);
 	k = 0;
-	while (env[i])
-	{
+	while (env[i][j])
 		new_token[k++] = env[i][j++];
-		//write for debug only
-		//write(1, &new_token[k], 1);
-	}
 	new_token[k] = '\0';
 	return (new_token);
+}
+
+/*
+	***********************************************************
+					FT_BUILTIN
+	***********************************************************
+	is not mine, is magic from madrid should be ok
+	prototype:
+	int	ft_namebultin(t_hellmini *shell)
+*/
+int	(*ft_builtin(char *str))(t_hellmini *shell)
+{
+	static void	*builtins[7][2] = {
+	{"echo", ft_echo},
+	{"cd", ft_cd},
+	{"pwd", ft_pwd},
+	{"export", ft_export},
+	{"unset", ft_unset},
+	{"env", ft_env},
+	{"exit", ft_exit}
+	};
+	int			i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (str)
+		{
+			if (!ft_strncmp(builtins[i][0], str, ft_strlen((builtins[i][0]))))
+				return (builtins[i][1]);
+		}
+		i++;
+	}
+	return (NULL);
 }
 
 /*
@@ -52,8 +82,6 @@ char	*ft_expander(char *str, char **env)
 	working 
 	l'ultimo else mi è un po' oscuro 
 	we have to decide if do the fork in ft execve or in executor
-
-	add relative path execution
 */
 
 void	ft_execv(t_hellmini *shell, pid_t pid)
@@ -108,10 +136,11 @@ void	ft_executor(t_hellmini *parser)
 		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[CASH])
 			parser->current_cmd->command
 				= ft_expander(parser->current_cmd->command, parser->env);
-		if (parser->current_cmd->next == NULL)	//
+		if (parser->current_cmd->next == NULL)	//simple command?
 		{
-			if (ft_strcmp(parser->current_cmd->command, builtin[i]))
-				ft_builtin(builtin[i]);
+			// if (ft_strcmp(parser->current_cmd->command, builtin[i]))
+			if (ft_builtin(parser->current_cmd->command))
+			;
 			else
 				ft_execv(parser, pid);
 		}

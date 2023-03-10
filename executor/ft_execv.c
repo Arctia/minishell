@@ -81,7 +81,7 @@ char	**ft_getpath(t_hellmini *shell, int i)
 
 	i = 0;
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		printf("Current working dir: %s\n", cwd);
+		;
 	else
 		perror("getcwd() error");
 	while (shell->env[i])
