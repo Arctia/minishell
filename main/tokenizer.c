@@ -36,10 +36,10 @@ int	tkn_nbr(char *str)
 	return (n_tkn);
 }
 
-//count the lenght until the first occurence of char
-//(mainly to get the size necessary to malloc tokens
-//or to get the value of an index from an env var)
-int	ft_strchr_len(char *str, char c)
+	// count the lenght until the first occurence of char
+	//(mainly to get the size necessary to malloc tokens
+	// or to get the value of an index from an env var)
+	int	ft_strchr_len(char *str, char c)
 {
 	int	i;
 
@@ -55,7 +55,6 @@ int	ft_strchr_len(char *str, char c)
 t_command	* count_pqwq(t_command *command, char *str)
 {
 	int	i;
-	//int	k;
 
 	i = 0;
 	while (str[i])
@@ -75,12 +74,12 @@ t_command	* count_pqwq(t_command *command, char *str)
 
 char	**rip_and_tear(t_command *command, char *str)
 {
-	int		i;
-	int		n_cmds;
+//	int		i;
+//	int		n_cmds;
 	//char	**tkn_matrix;
 
-	i = 0;
-	n_cmds = 1;
+//	i = 0;
+//	n_cmds = 1;
 	if ((count_pqwq(command, str))->shell->mc_quotes % 2
 		|| (count_pqwq(command, str))->shell->mc_wquotes % 2)
 		write(2, "syntax error, odd number of quotes or double quotes\n", 53);

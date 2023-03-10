@@ -68,16 +68,9 @@ void	sigquit_handler(int sig)
 	int	ch_pid;
 
 	ch_pid = fork();
-	//ft_putstr_fd("exit\n", 1);
-	//write(1, "exit\n", 6);
 	(void)sig;
 	waitpid(ch_pid, NULL, 0);
-	// rl_on_new_line();
-	// if (ch_pid)
-	// 	rl_replace_line("exit\n", 0);
-	//if (!tcdrain(STDOUT_FILENO))
 	exit(0);
-	// rl_redisplay();
 }
 
 //Ctrl-D migliorato?
@@ -100,10 +93,6 @@ void	sigquit_handler(int sig)
 
 void	*ft_handler(int sig)
 {
-	//pid_t child;
-	//char	*new_prompt;
-
-	//child = fork();
 	if (sig == SIGINT)
 	{
 		(void)sig;
@@ -116,22 +105,10 @@ void	*ft_handler(int sig)
 	if (sig == SIGQUIT)
 	{
 		(void)sig;
-		// waitpid(- 1, NULL, WUNTRACED);
 		readline(ft_strjoin_free(PROMPT, "exit", 0, 0));
 		rl_redisplay();
-//			write(0, "exit", 5);
-		//rl_replace_line("exit\n", 0);
-		// waitpid(child, NULL, WUNTRACED);
-		// if (child == fork())
-		// {
-		// 	rl_line_buffer = ft_strjoin(PROMPT, "exit\n");
-		// 	readline(rl_line_buffer);
-		//rl_redisplay();
-
-		// }
 		exit(3);
 	}
-	// if (sig == SIGTERM)
 	exit(1);
 }
 //QUALCUNO PENSI AI BAMBINI!!!!(cit.)
