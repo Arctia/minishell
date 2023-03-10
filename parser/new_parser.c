@@ -158,6 +158,44 @@ int	split_string(t_command *cmd)
 	return (items);
 }
 
+void	init_flags(t_command *cmd)
+{
+	int	i;
+
+	i = 7;
+	while (i >= 0)
+		cmd->spc[i--] = 0;
+}
+
+void	set_flags(t_command *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd->str[i])
+	{
+		if (cmd->str[i] == '|')
+			cmd->spc[PIPE] = 1;
+		else if (cmd->str[i] == '\'' && cmd->spc[DQUOTE] == 1)
+			cmd->spc[MQUOTE] = 1;
+		else if (cmd->str[i] == '"' && cmd->spc[SQUOTE] == 1)
+			cmd->spc[MQUOTE] = 1;
+		else if (cmd->str[i] == '\'')
+			cmd->spc[SQUOTE] = 1;
+		else if (cmd->str[i] == '"')
+			cmd->spc[DQUOTE] = 1;
+		else if (cmd->str[i] == '>' && cmd->str[i + 1] == '>')
+			cmd->spc[REDAPP] = 1;
+		else if (cmd->str[i] == '<' && cmd->str[i + 1] == '<')
+			cmd->spc[HERDOC] = 1;
+		else if (cmd->str[i] == '>' && cmd->str[i - 1] != '>')
+			cmd->spc[REDIN] = 1;
+		else if (cmd->str[i] == '<' && cmd->str[i - 1] != '<')
+			cmd->spc[REDOUT] = 1;
+		i++;
+	}
+}
+
 /*##############################################################################
 #	Tokenizer receives shell struct, cycles through all commands and
 		fill their fields. Every command struct should have a
@@ -176,6 +214,8 @@ int	parser(t_hellmini *sh)
 			return (FAIL);
 		set_command_name(cmd);
 		set_arguments(cmd, args);
+		init_flags(cmd);
+		set_flags(cmd);
 		cmd = cmd->next;
 	}
 	return (SUCCESS);
