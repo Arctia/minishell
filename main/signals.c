@@ -1,5 +1,8 @@
 #include "../global.h"
-//Ctrl-C(SIGINT)
+
+//#define _POSIX_C_SOURCE 199309L#define _POSIX_C_SOURCE 199309L
+
+// Ctrl-C(SIGINT)
 void	sigint_handler(int sig)
 {
 	(void)sig;
@@ -27,19 +30,20 @@ void	sigint_help(char **envp)
 	rl_on_new_line();
 	rl_redisplay();
 }
-void	ft_re_canon()
-{
-	struct termios	raw_settings;
 
-	raw_settings.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
-						| INLCR | IGNCR | ICRNL | IXON);
-	raw_settings.c_oflag &= ~OPOST;
-	raw_settings.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-	raw_settings.c_cflag &= ~(CSIZE | PARENB);
-	raw_settings.c_cflag |= CS8;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw_settings);
-	write(1, "gesuappeso\n", 12);
-}
+// void	ft_re_canon()
+// {
+// 	struct termios	raw_settings;
+
+// 	raw_settings.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+// 						| INLCR | IGNCR | ICRNL | IXON);
+// 	raw_settings.c_oflag &= ~OPOST;
+// 	raw_settings.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+// 	raw_settings.c_cflag &= ~(CSIZE | PARENB);
+// 	raw_settings.c_cflag |= CS8;
+// 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw_settings);
+// 	write(1, "gesuappeso\n", 12);
+// }
 
 
 void	ft_suppress_output(void)
