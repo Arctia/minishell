@@ -5,7 +5,7 @@
 #	Help Functions
 ############################################################################*/
 
-int	ft_strlen(char *str)
+/*int	ft_strlen(char *str)
 {
 	int	i;
 
@@ -13,7 +13,7 @@ int	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
-}
+}*/
 
 void	debug(char *str)
 {
@@ -25,7 +25,7 @@ void	debug(char *str)
 	write(1, "\n", 1);
 	count += 1;
 }
-
+/*
 int	ft_isspace(int c)
 {
 	if (9 <= c && c <= 13 || c == 32)
@@ -38,7 +38,7 @@ int	ft_isnotspace(int c)
 	if (9 <= c && c <= 13 || c == 32)
 		return (0);
 	return (1);
-}
+}*/
 
 int	until_space(const char *str)
 {
@@ -95,6 +95,8 @@ static void	set_arguments(t_command *cmd, int args)
 		cmd->arguments[i - 1][j] = '\0';
 		i++;
 	}
+	if (i == 1)
+		cmd->arguments[0] = NULL;
 }
 
 /*##############################################################################
@@ -102,6 +104,7 @@ static void	set_arguments(t_command *cmd, int args)
 ############################################################################*/
 /* __ items in string ___________________?______________________________________
 		. return number of items to be stored
+		. single/double quotes TODO
 _________________________________________!_________________________________ */
 int	items_in_string(char *str)
 {
@@ -114,12 +117,12 @@ int	items_in_string(char *str)
 	items_number = 0;
 	while (str[i])
 	{
-		if (ft_isnotspace(str[i]) && !in_word)
+		if (ft_isnotspace(str[i]) && in_word == 0)
 		{
-			in_word = 1;
 			items_number++;
+			in_word = 1;
 		}
-		else
+		else if (ft_isspace(str[i]))
 			in_word = 0;
 		i++;
 	}
@@ -168,7 +171,6 @@ void	write_word(char *cnt, t_command *cmd)
 _________________________________________!_________________________________ */
 int	split_string(t_command *cmd)
 {
-	int	test = 0;
 	char	*init;
 	int		items;
 	int		c;
@@ -240,16 +242,20 @@ void	set_cmd_flags(t_command *cmd)
 ############################################################################*/
 void	print_arguments_and_flags(t_command *cmd)
 {
-	int	i = 0;
+	int	i;
 	char *ar[] = {"PIPE  ", "SQUOTE", "DQUOTE", "MQUOTE",
 			"REDIN ", "REDOUT", "REDAPP", "HERDOC"};
 	char *co[] = {"-XX- FALSE", "-\\/-   --:   TRUE"};
+	i = 0;
 	while (cmd->arguments[i])
 		debug(cmd->arguments[i++]);
 	debug("past");
 	i = 0;
 	while (i < 8)
-		printf("%s: %s\n", ar[(i - 1) % 8], co[cmd->spc[i++] % 2]);
+	{
+		printf("%s: %s\n", ar[(i - 1) % 8], co[cmd->spc[i] % 2]);
+		i++;
+	}
 }
 
 int	parser(t_hellmini *sh)

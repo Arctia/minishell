@@ -36,7 +36,10 @@ int	prompt_loop(t_hellmini *shell)
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
 		if (shell->input)
+		{
 			lexer_init(shell);
+			parser(shell);
+		}
 		free_commands(shell);
 		//rl_on_new_line();
 		//free(shell->input);

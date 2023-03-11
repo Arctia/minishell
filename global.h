@@ -21,6 +21,9 @@
 // Constant declarations
 # define NAME_MAX 255
 # define PATH_MAX 1024
+# define SUCCESS 0
+# define FAIL 1
+
 
 // Operator presence
 # define PIPE 0
@@ -74,6 +77,8 @@ typedef struct s_command
 	t_hellmini 			*shell;
 }	t_command;
 
+// parser.c
+int						parser(t_hellmini *sh);
 
 /*lexer.c
 			lexer.c			*/
