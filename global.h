@@ -75,8 +75,13 @@ typedef struct s_command
 }	t_command;
 
 
-//lexer.c
-int						lexer_init(t_hellmini *shell);
+/*lexer.c
+			lexer.c			*/
+int     				lexer_init(t_hellmini *shell);
+/*			lexer_splitter.c  */
+void					lexer_error(char *message);
+char					*split_operator(char *line, int *ff, int not_new);
+char					*split_line(char *line);
 
 //tokenizer.c
 int						tkn_nbr(char *str);

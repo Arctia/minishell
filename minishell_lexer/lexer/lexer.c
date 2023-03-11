@@ -1,4 +1,4 @@
-#include "global.h"
+#include "./../../global.h"
 
 void	kalirio()
 {
@@ -6,16 +6,16 @@ void	kalirio()
 
 	if (i == 0)
 	{
-		printf("salve signore, è un piacere lavorare con lei\n");
+		//printf("salve signore, è un piacere lavorare con lei\n");
 		i++;
 	}
 	else
 	{
-		printf("mio signore, il cammino fino a qui è assicurato, buona continuazione\n");
+		//printf("mio signore, il cammino fino a qui è assicurato, buona continuazione\n");
 	}
 }
 
-int	ft_strlen(char *str)
+/*int	ft_strlen(char *str)
 {
 	int i = 0;
 
@@ -29,12 +29,12 @@ int	ft_isspace(int c)
 	if (9 <= c && c <= 13 || c == 32)
 		return (1);
 	return (0);
-}
+}*/
 
 //second part of the function below
 int	check_quotes(char *line, int i) 
 {
-	static int h = 0;
+	//static int h = 0;
 	char	quote;
 
 	quote = line[i];
@@ -43,7 +43,7 @@ int	check_quotes(char *line, int i)
 		if ((line[i] == '\"' || line[i] == '\'') && line[i] != quote)
 		{
 			i = check_quotes(line, i);
-			printf("i = %d, %c\nh = %d", i, line[i], h);
+			//printf("i = %d, %c\nh = %d", i, line[i], h);
 			if (i == -1)
 				return (-1);
 		}
@@ -76,7 +76,7 @@ int check_closures(char *line, int i)
 }
 
 //searches and split following commands from the line on the next command argument
-void	lexer_default(char *line, t_command *cmd)
+void	lexer_default(char *line, t_command *cmd, int not_new)
 {
 	t_command *tmp;
 	int	i;
@@ -95,7 +95,7 @@ void	lexer_default(char *line, t_command *cmd)
 		}
 		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
 		{
-			cmd->str = split_operator(line, &i);
+			cmd->str = split_operator(line, &i, not_new++);
 			//printf("splitto%c\n", line[i]);
 			tmp = cmd;
 			cmd = cmd->next;
@@ -182,6 +182,7 @@ int lexer_init(t_hellmini *shell)
 	int			i;
 
 	line = shell->input;
+	line[ft_strlen(line) + 1] = '\0';
 	i = 0;
 	if (check_syntax(line, i) != 0)
 	{
@@ -190,17 +191,15 @@ int lexer_init(t_hellmini *shell)
 	}
 	shell->current_cmd = (t_command *)malloc(sizeof(t_command));
 	if (!(shell->current_cmd))
-	{
 		return (-1);
-	}
-	lexer_default(line, shell->current_cmd);
+	lexer_default(line, shell->current_cmd, 0);
 	//printf("%s", shell->current_cmd->str);
-	print_commands(shell->current_cmd);
+	//print_commands(shell->current_cmd);
 	return (0);
 }
 
 //testing main, remove after testing
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
 	t_hellmini shell;
 	int	i;
@@ -218,4 +217,4 @@ int main(int argc, char **argv)
 	lexer_init(&shell);
 	
 	return (0);
-}
+}*/

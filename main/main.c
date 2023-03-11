@@ -12,11 +12,16 @@
 //tokenizing the input. And it's quite some badass music.
 //If you don't agree, feel free to go and f##k off :)
 
+void	free_commands(t_hellmini *shell)
+{
+	free(shell->current_cmd);
+	shell->current_cmd = NULL;
+}
+
 int	prompt_loop(t_hellmini *shell)
 {
 	while(1)
 	{
-
 		signal(SIGINT, ft_sigs_handler);
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
@@ -30,8 +35,11 @@ int	prompt_loop(t_hellmini *shell)
 		}
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
-		if (!(shell->input))
+		if (shell->input)
 			lexer_init(shell);
+		free_commands(shell);
+		//rl_on_new_line();
+		//free(shell->input);
 	}
 
 	//rip_and_tear(shell->current_cmd, shell->current_cmd->command);

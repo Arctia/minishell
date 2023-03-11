@@ -11,6 +11,8 @@ SRCS=	./main/signals2_0.c \
 		./main/expander.c \
 		./main/env_handlers.c \
 		./main/main.c \
+		./minishell_lexer/lexer/lexer.c \
+		./minishell_lexer/lexer/lexer_splitter.c 
 
 OBJS=$(SRCS:.c=.o)
 
@@ -32,10 +34,11 @@ all:$(NAME)
 
 clean:
 		rm -f *.o
+		rm -f main/*.o
+		rm -f minishell_lexer/lexer/*.o
 		$(MAKE) clean -C ./libft
 
 fclean: clean
-		rm -f *.o
 		rm -f $(NAME)
 		$(MAKE) fclean -C ./libft
 

@@ -1,4 +1,4 @@
-#include "global.h"
+#include "./../../global.h"
 
 void	lexer_error(char *message) //example and sketch of an exit error function, not really integrated with the minishell
 {
@@ -12,13 +12,13 @@ int	split_operator_line(char *line, int i)
 {
 	char	quote;
 	char	operator;
-	
+
 	while (line[i] != 0)
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 		{
 			i++;
-			quote == line[i];
+			quote = line[i];
 			while (line[i] != quote)
 				i++;
 		}
@@ -29,7 +29,7 @@ int	split_operator_line(char *line, int i)
 			operator = line[i];
 			if (line[i + 1] == operator)
 				i++;
-			printf("splitto %s su %c\n", line, line[i]);
+			//printf("splitto %s su %c\n", line, line[i]);
 			break;
 		}
 		i++;
@@ -38,18 +38,18 @@ int	split_operator_line(char *line, int i)
 }
 
 //splits the line with the following command from the line yet to be checked
-char	*split_operator(char *line, int *ff)
+char	*split_operator(char *line, int *ff, int not_new)
 {
 	static int	r;
 	char		*ret;
 	int			i;
 	int			j;
 
-	if (!r)
+	if (!r || !not_new)
 		r = 0;
 	j = 0;
 	i = split_operator_line(line, *ff);
-	ret = (char *) malloc(sizeof(char) * (i - r) + 1);
+	ret = (char *) malloc(sizeof(char) * (i) + 1);
 	while ((j + r) <= i)
 	{
 		ret[j] = line[j + r];
@@ -62,7 +62,7 @@ char	*split_operator(char *line, int *ff)
 }
 
 //splits the line yet to be controlled from the command already split
-char	*split_line(char *line)
+/*char	*split_line(char *line)
 {
 	char	*ret;
 	int		i;
@@ -78,4 +78,4 @@ char	*split_line(char *line)
 		i++;
 	}
 	return (ret);
-}
+}*/
