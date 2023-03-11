@@ -93,14 +93,17 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 
 	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
+	int i=0;
+	while (arg[i])
 	pid = fork();
 	if (!pid)
 	{
+
 		if (execve(path, arg, shell->env) == -1)
-			perror("execution failed");
+			perror("execv execution failed");
 	}
 	else if (pid < 0)
-		perror("fork failed");
+		perror("execv fork failed");
 	else
 	{
 		waitpid(pid, &status, WUNTRACED);
@@ -132,7 +135,7 @@ void	ft_executor(t_hellmini *parser)
 
 	//int		status;
 	pid = 111;
-	while (parser->current_cmd->command)
+	while (parser->current_cmd)
 	{
 		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[CASH])
 			parser->current_cmd->command
@@ -160,7 +163,7 @@ void	ft_executor(t_hellmini *parser)
 			// 	;//? not sure if here or in ft_executor with a while loop
 		}
 		// ft_execv(parser, pid); //see function comment maybe every single exceptio call his own ft_sexecv
-		if (parser->current_cmd->next)
+		// if (parser->current_cmd->next)
 			parser->current_cmd = parser->current_cmd->next;
 	}
 }

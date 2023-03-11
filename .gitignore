@@ -6,3 +6,4 @@
 .vscode/
 minishell
 libft/libft.a
+minishell.dSYM/
