@@ -3,13 +3,16 @@
 
 // e libft?
 # include "./libft/libft.h"
+# include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <signal.h>
+# include <dirent.h>
 # include <termios.h>
-# include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
+# include <sys/param.h>
 # include <sys/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
