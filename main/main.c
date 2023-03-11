@@ -30,6 +30,8 @@ int	prompt_loop(t_hellmini *shell)
 		}
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
+		if (!(shell->input))
+			lexer_init(shell);
 	}
 
 	//rip_and_tear(shell->current_cmd, shell->current_cmd->command);

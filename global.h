@@ -74,6 +74,10 @@ typedef struct s_command
 	t_hellmini 			*shell;
 }	t_command;
 
+
+//lexer.c
+int						lexer_init(t_hellmini *shell);
+
 //tokenizer.c
 int						tkn_nbr(char *str);
 int						ft_strchr_len(char *str, char c);

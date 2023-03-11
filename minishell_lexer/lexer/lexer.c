@@ -57,7 +57,7 @@ int	check_quotes(char *line, int i)
 //makes sure no quotes are weirdly innested into each other, redirecting to "check argument"
 int check_closures(char *line, int i)
 {
-	printf("augusto: meow, la linea è: %s, i è:%d\n", line, i);
+	//printf("augusto: meow, la linea è: %s, i è:%d\n", line, i);
 	while (line[i] != 0)
 	{
 		if (line[i] == '\'' || line[i] == '\"')
@@ -71,7 +71,7 @@ int check_closures(char *line, int i)
 		}
 		i++;
 	}
-	write(1, "a", 1);
+	//write(1, "\na\n", 3);
 	return (0);
 }
 
@@ -96,7 +96,7 @@ void	lexer_default(char *line, t_command *cmd)
 		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
 		{
 			cmd->str = split_operator(line, &i);
-			printf("splitto%c\n", line[i]);
+			//printf("splitto%c\n", line[i]);
 			tmp = cmd;
 			cmd = cmd->next;
 		}
@@ -132,7 +132,9 @@ int	check_operator(char *line, int i)
 
 	flag = 0;
 	while (ms_isoperator(line[i]) || ft_isspace(line[i]))
-	{
+	{	
+		if (!line[i + 1])
+			return (-1);
 		if (ms_isoperator(line[i]) == 1)
 		{
 			if (ms_isoperator(line[i + 1]) && line[i + 1] == '|')
@@ -153,19 +155,19 @@ int	check_operator(char *line, int i)
 
 int	check_syntax(char *line, int i)
 {
-	printf("cc=%d\n", check_closures(line, i));
-	if (check_closures(line, i) == -1);
+	//printf("cc=%d\n", check_closures(line, i));
+	if (check_closures(line, i) != 0)
 	{
 		write(1, "?", 1);
 		return (-1);
 	}
 	kalirio();
-	write(1, "meow", 4);
+	//write(1, "meow", 4);
 	while(line[i] != 0)
 	{
 		if (ms_isoperator(line[i]) == 1)
 		{
-			if (check_operator(line, i) == -1);
+			if (check_operator(line, i) == -1)
 				return (-1);
 		}
 		i++;
@@ -192,7 +194,7 @@ int lexer_init(t_hellmini *shell)
 		return (-1);
 	}
 	lexer_default(line, shell->current_cmd);
-	printf("%s", shell->current_cmd->str);
+	//printf("%s", shell->current_cmd->str);
 	print_commands(shell->current_cmd);
 	return (0);
 }

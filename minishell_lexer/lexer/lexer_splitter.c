@@ -7,7 +7,8 @@ void	lexer_error(char *message) //example and sketch of an exit error function, 
 	//free(com);
 }
 
-int	split_operator_line(char *line, int i) //looks for the index where to split the line between command and line yet to be checked.
+//looks for the index where to split the line between command and line yet to be checked.
+int	split_operator_line(char *line, int i)
 {
 	char	quote;
 	char	operator;
@@ -48,15 +49,15 @@ char	*split_operator(char *line, int *ff)
 		r = 0;
 	j = 0;
 	i = split_operator_line(line, *ff);
-	ret = (char *) malloc(sizeof(char) * i + 1);
-	while (j <= i)
+	ret = (char *) malloc(sizeof(char) * (i - r) + 1);
+	while ((j + r) <= i)
 	{
 		ret[j] = line[j + r];
 		j++;
 	}
 	ret[j] = '\0';
 	*ff = i;
-	r = j;
+	r += j;
 	return (ret);
 }
 
