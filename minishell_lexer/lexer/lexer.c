@@ -194,7 +194,7 @@ int lexer_init(t_hellmini *shell)
 		return (-1);
 	lexer_default(line, shell->current_cmd, 0);
 	//printf("%s", shell->current_cmd->str);
-	//print_commands(shell->current_cmd);
+	print_commands(shell->current_cmd);
 	return (0);
 }
 

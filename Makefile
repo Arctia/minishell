@@ -3,7 +3,7 @@ NAME=minishell
 
 CC=gcc
 
-FLAGS=-Wall -Werror -Wextra -g
+FLAGS= #-Wall -Werror -Wextra -g
 
 INCS = ./global.h ./executor/executor.h
 
@@ -21,18 +21,25 @@ SRCS=	./main/signals2_0.c \
 		./executor/pipe.c \
 		./executor/redir.c
 
+READLINE_DIR = $(shell brew --prefix readline)
+
+READLINE_LIB = -lreadline -lhistory -L $(READLINE_DIR)/lib
+
+
+
 OBJS=$(SRCS:.c=.o)
 
 %.o:%.c $(INCS)
-		$(CC) $(FLAGS) -c $< -o $@
+		$(CC) $(FLAGS) -I$(READLINE_DIR)/include  -c $< -o $@
 
 LIBFT=./libft/libft.a
 
-READLINE = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib \
-				-I$(HOME)/.brew/opt/readline/include
+# READLINE = -L/usr/include -lreadline -L$(HOME)/.brew/opt/readline/lib \
+# 				-I$(HOME)/.brew/opt/readline/include
 
 $(NAME): $(OBJS) $(LIBFT)
-		$(CC) $(FLAGS) $(SRCS) $(LIBFT) -o $(NAME) $(READLINE)
+		$(CC) $(FLAGS) $(SRCS) $(LIBFT) $(READLINE_LIB) -o $(NAME) 
+#$(READLINE)
 
 $(LIBFT):
 		$(MAKE) -C ./libft/

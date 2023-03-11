@@ -1,5 +1,5 @@
 #ifndef EXECUTOR_H
-# define EXECUOTIR_H
+# define EXECUTOR_H
 
 # include "../global.h"
 

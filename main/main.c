@@ -40,7 +40,7 @@ int	prompt_loop(t_hellmini *shell)
 		{
 			lexer_init(shell);
 			parser(shell);
-			ft_executor(shell);
+			// ft_executor(shell);
 		}
 		free_commands(shell);
 		//rl_on_new_line();

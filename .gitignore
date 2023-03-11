@@ -2,3 +2,7 @@
 **.h.gch
 **ccd
 **.o
+**/a.out
+.vscode/
+minishell
+libft/libft.a

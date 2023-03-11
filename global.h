@@ -14,8 +14,8 @@
 # include <sys/ioctl.h>
 # include <sys/param.h>
 # include <sys/types.h>
-# include <readline/history.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 
 //per far girare sigaction
 //#define _POSIX_C_SOURCE 199309L
@@ -23,7 +23,7 @@
 
 // Constant declarations
 //# define NAME_MAX 255
-//# define PATH_MAX 1024
+// # define PATH_MAX 1024
 # define SUCCESS 0
 # define FAIL 1
 
