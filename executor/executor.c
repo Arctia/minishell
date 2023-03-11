@@ -48,7 +48,7 @@ char	*ft_expander(char *str, char **env)
 	is not mine, is magic from madrid should be ok
 	prototype:
 	int	ft_namebultin(t_hellmini *shell)
-*/
+
 int	(*ft_builtin(char *str))(t_hellmini *shell)
 {
 	static void	*builtins[7][2] = {
@@ -73,7 +73,7 @@ int	(*ft_builtin(char *str))(t_hellmini *shell)
 		i++;
 	}
 	return (NULL);
-}
+}*/
 
 /*
 	***********************************************************
@@ -88,7 +88,7 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 {
 	char	*path;
 	char	**arg; /* array[4] tt a null e metto dentro i cmd che mi servono */
-	char	**env;
+	//char	**env;
 	int		status;
 
 	arg = ft_listtomatrix(shell);
@@ -96,7 +96,7 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 	pid = fork();
 	if (!pid)
 	{
-		if (execve(path, arg, env) == -1)
+		if (execve(path, arg, shell->env) == -1)
 			perror("execution failed");
 	}
 	else if (pid < 0)
@@ -129,8 +129,9 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 void	ft_executor(t_hellmini *parser)
 {
 	pid_t	pid;
-	int		status;
 
+	//int		status;
+	pid = 111;
 	while (parser->current_cmd->command)
 	{
 		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[CASH])
@@ -139,10 +140,10 @@ void	ft_executor(t_hellmini *parser)
 		if (parser->current_cmd->next == NULL)	//simple command?
 		{
 			// if (ft_strcmp(parser->current_cmd->command, builtin[i]))
-			if (ft_builtin(parser->current_cmd->command))
-			;
-			else
-				ft_execv(parser, pid);
+			//if (ft_builtin(parser->current_cmd->command))
+			//	;
+			//else
+			ft_execv(parser, pid);
 		}
 		else if (parser->current_cmd->spc[REDIN])
 			ft_less(parser);

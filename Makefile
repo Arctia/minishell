@@ -5,6 +5,8 @@ CC=gcc
 
 FLAGS=-Wall -Werror -Wextra -g
 
+INCS = ./global.h ./executor/executor.h
+
 SRCS=	./main/signals2_0.c \
 		./main/signals.c \
 		./main/tokenizer.c \
@@ -13,11 +15,15 @@ SRCS=	./main/signals2_0.c \
 		./main/main.c \
 		./minishell_lexer/lexer/lexer.c \
 		./minishell_lexer/lexer/lexer_splitter.c \
-		./parser/parser.c
+		./parser/parser.c \
+		./executor/executor.c \
+		./executor/ft_execv.c \
+		./executor/pipe.c \
+		./executor/redir.c
 
 OBJS=$(SRCS:.c=.o)
 
-%.o:%.c
+%.o:%.c $(INCS)
 		$(CC) $(FLAGS) -c $< -o $@
 
 LIBFT=./libft/libft.a
@@ -38,6 +44,7 @@ clean:
 		rm -f main/*.o
 		rm -f minishell_lexer/lexer/*.o
 		rm -f parser/*.o
+		rm -f executor/*.o
 		$(MAKE) clean -C ./libft
 
 fclean: clean

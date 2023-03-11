@@ -1,8 +1,8 @@
 
 #include "../global.h"
 // Constant declarations
-# define NAME_MAX 255
-# define PATH_MAX 1024
+//# define NAME_MAX 255
+//# define PATH_MAX 1024
 
 //keeps reading the env until it finds the desired $VAR, then
 //mallocs and replaces $VAR with it's expansion(aka the string after '=')

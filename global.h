@@ -19,11 +19,11 @@
 
 //per far girare sigaction
 //#define _POSIX_C_SOURCE 199309L
-#define _POSIX_C_SOURCE 200809L
+# define _POSIX_C_SOURCE 200809L
 
 // Constant declarations
-# define NAME_MAX 255
-# define PATH_MAX 1024
+//# define NAME_MAX 255
+//# define PATH_MAX 1024
 # define SUCCESS 0
 # define FAIL 1
 
@@ -112,4 +112,5 @@ void					sigquit_handler(int sig);
 void					sigquit_macro(int sig, t_hellmini *shell);
 void					*ft_handler(int sig);
 void					ft_sigs_handler(int sig);
+
 #endif

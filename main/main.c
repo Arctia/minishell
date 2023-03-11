@@ -1,4 +1,5 @@
 #include "../global.h"
+#include "../executor/executor.h"
 #include "prompt_and_signals.h"
 #define YEL "\e[0;33m"
 #define GRN "\e[0;32m"
@@ -39,6 +40,7 @@ int	prompt_loop(t_hellmini *shell)
 		{
 			lexer_init(shell);
 			parser(shell);
+			ft_executor(shell);
 		}
 		free_commands(shell);
 		//rl_on_new_line();

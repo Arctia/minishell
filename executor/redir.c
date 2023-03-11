@@ -24,7 +24,7 @@ void	ft_less(t_hellmini *shell)												//	<
 	close(fd);
 }
 
-void	ft_redirection(t_hellmini *shell)										//	>
+void	ft_redir(t_hellmini *shell)										//	>
 {
 	int	fd;
 
@@ -60,7 +60,7 @@ void	ft_heredoc(t_hellmini *shell)											//	<<
 		// if(ar[QUOTE] || ar[DQUOTE])
 		// 	ft_expander();				// i think we need it but maybe not
 		write(fd, &line, ft_strlen(line));
-		write(fd, '\n', 1);
+		write(fd, "\n", 1);
 		free(line);
 		line = readline(HEREDOC_MSG);
 	}
