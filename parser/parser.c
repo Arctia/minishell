@@ -7,17 +7,6 @@
 #	Help Functions
 ############################################################################*/
 
-void	debug(char *str)
-{
-	static char count = '0';
-
-	write(1, &count, 1);
-	write(1, " ", 1);
-	write(1, str, ft_strlen(str));
-	write(1, "\n", 1);
-	count += 1;
-}
-
 int	until_space(const char *str)
 {
 	int	i;
@@ -103,12 +92,14 @@ int	i_after_quote(char *str, int i, int *iw, int *in)
 	char	c;
 
 	c = str[i];
-	if (iw == 0 && str[i + 1] && str[i] != str[i + 1])
+	if (*iw == 0 && str[i + 1] && str[i] != str[i + 1])
 	{
 		*iw = 1;
-		*in++;
+		*in = *in + 1;
 	}
-	i = to_next_quote(str, i + 1, c);
+	i++;
+	i = to_next_quote(str, i, c);
+	return (i);
 }
 
 int	items_in_string(char *str)
@@ -121,9 +112,9 @@ int	items_in_string(char *str)
 	in_word = 0;
 	items_number = 0;
 	while (str[i])
-	{
+	{	
 		if (ft_isquote(str[i]))
-			i_after_quote(str, i, &in_word, &items_number);
+			i = i_after_quote(str, i, &in_word, &items_number);
 		else if (ft_isnotspace(str[i]) && in_word == 0)
 		{
 			items_number++;
@@ -187,6 +178,7 @@ void	write_word(char *cnt, t_command *cmd)
 	{
 		if (ft_isquote(cmd->str[0]))
 		{
+			c = 0;
 			t = to_next_quote(cmd->str, 1, cmd->str[0]);
 			while (c++ <= t)
 				cnt[i++] = cmd->str++[0];
@@ -290,7 +282,7 @@ void	print_arguments_and_flags(t_command *cmd)
 	i = 0;
 	while (i < 9)
 	{
-		pfn("%t %-8s--> %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
+		pfn("%t %-8s-->  %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
 		i++;
 	}
 }
@@ -313,7 +305,6 @@ int	parser(t_hellmini *sh)
 		print_arguments_and_flags(cmd);
 		cmd = cmd->next;
 	}
-	//return (FAIL);
 	return (SUCCESS);
 }
 
