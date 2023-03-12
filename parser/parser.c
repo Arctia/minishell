@@ -67,10 +67,10 @@ static void	set_command_name(t_command *cmd)
 
 	i = 0;
 	cmd->command = (char *) malloc(sizeof(char)
-			* ft_strlen(cmd->tokens[0]) + 1);
+			* ft_strlen(cmd->tokens[0]));
 	while (cmd->tokens[0][i++])
 		cmd->command[i - 1] = cmd->tokens[0][i - 1];
-	cmd->command[i] = '\0';
+	cmd->command[i - 1] = '\0';
 }
 
 static void	set_arguments(t_command *cmd, int args)
@@ -94,7 +94,7 @@ static void	set_arguments(t_command *cmd, int args)
 		j = 0;
 		while (cmd->tokens[i][j++])
 			cmd->arguments[i - 1][j - 1] = cmd->tokens[i][j - 1];
-		cmd->arguments[i - 1][j] = '\0';
+		cmd->arguments[i - 1][j - 1] = '\0';
 		i++;
 	}
 	if (i == 1)
