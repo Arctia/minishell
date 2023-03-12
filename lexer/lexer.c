@@ -1,5 +1,28 @@
 #include "./../global.h"
 
+t_command	*init_command(t_hellmini *shell)
+{
+	t_command	*cmd;
+	int	i;
+
+	cmd = (t_command *) malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->str = NULL;
+	cmd->tokens = NULL;
+	i = 0;
+	while (i < 9)
+		cmd->spc[i++] = 0;
+	cmd->command = NULL;
+	cmd->flags = NULL;
+	cmd->arguments = NULL;
+	cmd->ret = 0;
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->shell = shell;
+	return (cmd);
+}
+
 void	kalirio()
 {
 	static int	i = 0;
@@ -76,29 +99,27 @@ int check_closures(char *line, int i)
 }
 
 //searches and split following commands from the line on the next command argument
-void	lexer_default(char *line, t_command *cmd, int not_new)
+void	lexer_default(t_hellmini *shell, t_command *cmd, int not_new, int i)
 {
-	t_command *tmp;
-	int	i;
+	t_command	*tmp;
+	char		*line;
 
-	i = 0;
+	line = shell->input;
 	while (1)
 	{
 		if (cmd == NULL)
 		{
-			cmd = (t_command *) malloc(sizeof(t_command));
+			cmd = init_command(shell);
 			if (!cmd)
 				return ;
-			cmd->next = NULL;
 			tmp->next = cmd;
 			cmd->prev = tmp;
 		}
 		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
 		{
 			cmd->str = split_operator(line, &i, not_new++);
-			//printf("splitto%c\n", line[i]);
 			tmp = cmd;
-			cmd = cmd->next;
+			cmd = NULL;
 		}
 		if (line[i] == '\0')
 			break ;
@@ -112,9 +133,9 @@ void	print_commands(t_command *cmd)
 
 	tmp = cmd;
 
-	while (tmp != NULL && tmp)
+	while (tmp && tmp != NULL)
 	{
-		printf("%s\n", tmp->str);
+		ft_printf("%s\n", tmp->str);
 		tmp = tmp->next;
 	}
 }
@@ -182,19 +203,21 @@ int lexer_init(t_hellmini *shell)
 	int			i;
 
 	line = shell->input;
-	line[ft_strlen(line) + 1] = '\0';
+	line[ft_strlen(line)] = '\0';
 	i = 0;
 	if (check_syntax(line, i) != 0)
 	{
 		lexer_error("bad syntax.");
 		return (-1);
 	}
-	shell->current_cmd = (t_command *)malloc(sizeof(t_command));
+	shell->current_cmd = init_command(shell);
 	if (!(shell->current_cmd))
 		return (-1);
-	lexer_default(line, shell->current_cmd, 0);
+	lexer_default(shell, shell->current_cmd, 0, 0);
 	//printf("%s", shell->current_cmd->str);
+	
 	print_commands(shell->current_cmd);
+	
 	return (0);
 }
 
