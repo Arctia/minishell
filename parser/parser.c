@@ -67,7 +67,7 @@ static void	set_command_name(t_command *cmd)
 
 	i = 0;
 	cmd->command = (char *) malloc(sizeof(char)
-			* ft_strlen(cmd->tokens[0]));
+			* ft_strlen(cmd->tokens[0]) + 1);
 	while (cmd->tokens[0][i++])
 		cmd->command[i - 1] = cmd->tokens[0][i - 1];
 	cmd->command[i - 1] = '\0';
@@ -208,15 +208,14 @@ void	init_flags(t_command *cmd)
 		cmd->spc[i--] = 0;
 }
 
-void	set_cmd_flags(t_command *cmd)
+void	set_cmd_flags(t_command *cmd, int i)
 {
-	int	i;
-
-	i = 0;
 	while (cmd->str[i])
 	{
 		if (cmd->str[i] == '|')
 			cmd->spc[PIPE] = 1;
+		else if (cmd->str[i] == '$')
+			cmd->spc[CASH] = 1;
 		else if (cmd->str[i] == '\'' && cmd->spc[DQUOTE] == 1)
 			cmd->spc[MQUOTE] = 1;
 		else if (cmd->str[i] == '"' && cmd->spc[SQUOTE] == 1)
@@ -276,7 +275,7 @@ int	parser(t_hellmini *sh)
 			return (FAIL);
 		set_command_name(cmd);
 		set_arguments(cmd, args);
-		init_flags(cmd);
+		init_flags(cmd, i);
 		set_cmd_flags(cmd);
 		print_arguments_and_flags(cmd);
 		cmd = cmd->next;
