@@ -93,12 +93,9 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 
 	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
-	int i=0;
-	while (arg[i])
 	pid = fork();
 	if (!pid)
 	{
-
 		if (execve(path, arg, shell->env) == -1)
 			perror("execv execution failed");
 	}
