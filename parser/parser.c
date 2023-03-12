@@ -1,5 +1,7 @@
 
 #include "../global.h"
+#define GRN "\033[1;32m"
+#define WHITE "\033[0m"
 
 /*##############################################################################
 #	Help Functions
@@ -84,7 +86,7 @@ static void	set_arguments(t_command *cmd, int args)
 	{
 		cmd->arguments[i - 1] = (char *) malloc(sizeof(char)
 				* ft_strlen(cmd->tokens[i]) + 1);
-		if (cmd->arguments[i - 1])
+		if (!cmd->arguments[i - 1])
 		{
 			free(cmd->arguments);
 			return ;
@@ -243,17 +245,20 @@ void	set_cmd_flags(t_command *cmd)
 void	print_arguments_and_flags(t_command *cmd)
 {
 	int	i;
-	char *ar[] = {"PIPE  ", "SQUOTE", "DQUOTE", "MQUOTE",
-			"REDIN ", "REDOUT", "REDAPP", "HERDOC"};
-	char *co[] = {"-XX- FALSE", "-\\/-   --:   TRUE"};
+	char *ar[] = {"PIPE", "SQUOTE", "DQUOTE", "MQUOTE",
+			"REDIN ", "REDOUT", "REDAPP", "HERDOC", "CASH"};
+	char *co[] = {" ", GRN"TRUE"WHITE};
 	i = 0;
+	pfn("%2t command: '%s'", cmd->command);
 	while (cmd->arguments[i])
-		debug(cmd->arguments[i++]);
-	debug("past");
-	i = 0;
-	while (i < 8)
 	{
-		printf("%s: %s\n", ar[(i - 1) % 8], co[cmd->spc[i] % 2]);
+		pfn("%2t arg[%d]: '%s'", i, cmd->arguments[i]);
+		i++;
+	}
+	i = 0;
+	while (i < 9)
+	{
+		pfn("%t %-8s--> %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
 		i++;
 	}
 }
@@ -276,6 +281,7 @@ int	parser(t_hellmini *sh)
 		print_arguments_and_flags(cmd);
 		cmd = cmd->next;
 	}
+	//return (FAIL);
 	return (SUCCESS);
 }
 
