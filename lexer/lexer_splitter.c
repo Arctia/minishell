@@ -1,4 +1,4 @@
-#include "./../../global.h"
+#include "../global.h"
 
 void	lexer_error(char *message) //example and sketch of an exit error function, not really integrated with the minishell
 {
