@@ -136,31 +136,31 @@ char	*ft_findpath(t_hellmini *shell, int i)
 
 
 
-        char    **ft_addlinetomatrix(char **arr, char *line)
-        {
-                char    **rtn;
-                size_t  i;
-         
-                i = 0;
-                while (arr[i] != NULL)
-                        i++;
-                rtn = ft_calloc(sizeof(char *), i + 1 + 1);
-                if (!rtn)
-                        return (NULL);
-                i = 0;
-                while (arr[i] != NULL)
-                {
-                        rtn[i] = ft_strdup(arr[i]);
-                        if (rtn[i] == NULL)
-                        {
-                                ft_free_cmatrix(rtn);
-                                return (rtn);
-                        }
-                        i++;
-                }
-                rtn[i] = ft_strdup(line);
-                i++;
-                rtn[i] = NULL;
-                return (rtn);
-        }
+char	**ft_addlinetomatrix(char **arr, char *line)
+{
+	char	**rtn;
+	size_t	i;
+
+	i = 0;
+	while (arr[i] != NULL)
+		i++;
+	rtn = ft_calloc(sizeof(char *), i + 1 + 1);
+	if (!rtn)
+		return (NULL);
+	i = 0;
+	while (arr[i] != NULL)
+	{
+		rtn[i] = ft_strdup(arr[i]);
+		if (rtn[i] == NULL)
+		{
+			ft_free_cmatrix(rtn);
+			return (rtn);
+		}
+		i++;
+	}
+	rtn[i] = ft_strdup(line);
+	i++;
+	rtn[i] = NULL;
+	return (rtn);
+}
 
