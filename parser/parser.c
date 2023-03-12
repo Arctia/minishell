@@ -7,16 +7,6 @@
 #	Help Functions
 ############################################################################*/
 
-/*int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}*/
-
 void	debug(char *str)
 {
 	static char count = '0';
@@ -27,20 +17,6 @@ void	debug(char *str)
 	write(1, "\n", 1);
 	count += 1;
 }
-/*
-int	ft_isspace(int c)
-{
-	if (9 <= c && c <= 13 || c == 32)
-		return (1);
-	return (0);
-}
-
-int	ft_isnotspace(int c)
-{
-	if (9 <= c && c <= 13 || c == 32)
-		return (0);
-	return (1);
-}*/
 
 int	until_space(const char *str)
 {
@@ -56,6 +32,20 @@ void	move_to_next_char(t_command *cmd)
 {
 	while (cmd->str[0] && ft_isspace(cmd->str[0]))
 		cmd->str++;
+}
+
+char	ft_isquote(char ch)
+{
+	if (ch == '\'' || ch == '"')
+		return (ch);
+	return ('\0');
+}
+
+int	to_next_quote(char *str, int i, char quote)
+{
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i);
 }
 
 /*##############################################################################
@@ -108,6 +98,19 @@ static void	set_arguments(t_command *cmd, int args)
 		. return number of items to be stored
 		. single/double quotes TODO
 _________________________________________!_________________________________ */
+int	i_after_quote(char *str, int i, int *iw, int *in)
+{
+	char	c;
+
+	c = str[i];
+	if (iw == 0 && str[i + 1] && str[i] != str[i + 1])
+	{
+		*iw = 1;
+		*in++;
+	}
+	i = to_next_quote(str, i + 1, c);
+}
+
 int	items_in_string(char *str)
 {
 	int	items_number;
@@ -119,7 +122,9 @@ int	items_in_string(char *str)
 	items_number = 0;
 	while (str[i])
 	{
-		if (ft_isnotspace(str[i]) && in_word == 0)
+		if (ft_isquote(str[i]))
+			i_after_quote(str, i, &in_word, &items_number);
+		else if (ft_isnotspace(str[i]) && in_word == 0)
 		{
 			items_number++;
 			in_word = 1;
@@ -156,13 +161,41 @@ void	write_word_expander(char *cnt, char *str)
 	cnt[i] = '\0';
 }
 
-void	write_word(char *cnt, t_command *cmd)
+// consider quotes!
+void	write_word_old(char *cnt, t_command *cmd)
 {
 	int	i;
 
 	i = 0;
 	while (cmd->str[0] && ft_isnotspace(cmd->str[0]))
+	{
 		cnt[i++] = cmd->str++[0];
+	}
+	cnt[i] = '\0';
+}
+
+void	write_word(char *cnt, t_command *cmd)
+{
+	int	i;
+	int	t;
+	int	c;
+
+	i = 0;
+	t = 0;
+	c = 0;
+	while (cmd->str[0])
+	{
+		if (ft_isquote(cmd->str[0]))
+		{
+			t = to_next_quote(cmd->str, 1, cmd->str[0]);
+			while (c++ <= t)
+				cnt[i++] = cmd->str++[0];
+		}
+		else
+			cnt[i++] = cmd->str++[0];
+		if (ft_isspace(cmd->str[0]))
+			break ;
+	}
 	cnt[i] = '\0';
 }
 
@@ -187,7 +220,7 @@ int	split_string(t_command *cmd)
 	while (cmd->str[0] != 0)
 	{
 		cmd->tokens[c] = (char *) malloc(sizeof(char)
-				* until_space(cmd->str) + 1);
+				* ft_strlen(cmd->str) + 1);
 		if (!(cmd->tokens[c]))
 			return (0);
 		write_word(cmd->tokens[c], cmd);
@@ -275,8 +308,8 @@ int	parser(t_hellmini *sh)
 			return (FAIL);
 		set_command_name(cmd);
 		set_arguments(cmd, args);
-		init_flags(cmd, i);
-		set_cmd_flags(cmd);
+		init_flags(cmd);
+		set_cmd_flags(cmd, 0);
 		print_arguments_and_flags(cmd);
 		cmd = cmd->next;
 	}
