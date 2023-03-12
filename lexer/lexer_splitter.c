@@ -15,11 +15,13 @@ int	split_operator_line(char *line, int i)
 
 	while (line[i] != 0)
 	{
+		//pfn("augusto miagola: %c\n", line[i]);
 		if (line[i] == '\"' || line[i] == '\'')
 		{
-			i++;
 			quote = line[i];
-			while (line[i] != quote)
+			i++;
+			//pfn("augusto miagola ancora: %c\n", quote);
+			while (line[i] != quote && line[i] != 0)
 				i++;
 		}
 		if (line[i] == '|')
