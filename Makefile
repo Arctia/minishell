@@ -10,6 +10,7 @@ INCS = ./global.h ./executor/executor.h
 SRCS=	./main/signals2_0.c \
 		./main/signals.c \
 		./main/tokenizer.c \
+		./expander/expander_utils.c \
 		./main/expander.c \
 		./main/env_handlers.c \
 		./main/main.c \
