@@ -76,7 +76,6 @@ char	**ft_getpath(t_hellmini *shell, int i)
 	char	cwd[MAXPATHLEN];
 
 	ritemp = NULL;
-	i = 0;
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		;
 	else
@@ -120,6 +119,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	char			*temp;
 
 	path = ft_getpath(shell, 0);
+	ft_fixcommand(shell);
 	while (path[i])
 	{
 		dir = opendir(path[i]);
@@ -129,6 +129,7 @@ char	*ft_findpath(t_hellmini *shell, int i)
 			if (ft_strcmp(entry->d_name, shell->current_cmd->command))
 			{
 				closedir(dir);
+
 				temp = ft_append(path[i], shell);
 				ft_free_cmatrix(path);
 				return (temp);
