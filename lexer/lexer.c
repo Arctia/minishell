@@ -1,4 +1,4 @@
-#include "./../../global.h"
+#include "./../global.h"
 
 t_command	*init_command(t_hellmini *shell)
 {
@@ -54,43 +54,21 @@ int	ft_isspace(int c)
 	return (0);
 }*/
 
-//second part of the function below
-int	check_quotes(char *line, int i) 
-{
-	//static int h = 0;
-	char	quote;
-
-	quote = line[i];
-	while (line[i] != quote)
-	{
-		if ((line[i] == '\"' || line[i] == '\'') && line[i] != quote)
-		{
-			i = check_quotes(line, i);
-			//printf("i = %d, %c\nh = %d", i, line[i], h);
-			if (i == -1)
-				return (-1);
-		}
-		if (line[i] == 0)
-			return (-1);
-		i++;
-	}
-	return (i);
-}
-
-//makes sure no quotes are weirdly innested into each other, redirecting to "check argument"
+//makes sure no quotes are not closed
 int check_closures(char *line, int i)
 {
-	//printf("augusto: meow, la linea è: %s, i è:%d\n", line, i);
+	char	quote;
+	//pfn("augusto: meow, la linea è: %s, i è:%d\n", line, i);
 	while (line[i] != 0)
 	{
 		if (line[i] == '\'' || line[i] == '\"')
 		{
-			i = check_quotes(line, i);
-			if (i == -1)
-			{
-				write(1, "!", 1);
+			quote = line[i];
+			i++;
+			while (line[i] != 0 && line[i] != quote)
+				i++;
+			if (line[i] == 0)
 				return (-1);
-			}
 		}
 		i++;
 	}
@@ -115,12 +93,9 @@ void	lexer_default(t_hellmini *shell, t_command *cmd, int not_new, int i)
 			tmp->next = cmd;
 			cmd->prev = tmp;
 		}
-		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
-		{
-			cmd->str = split_operator(line, &i, not_new++);
-			tmp = cmd;
-			cmd = NULL;
-		}
+		cmd->str = split_operator(line, &i, not_new++);
+		tmp = cmd;
+		cmd = NULL;
 		if (line[i] == '\0')
 			break ;
 		i++;
