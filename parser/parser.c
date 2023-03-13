@@ -57,7 +57,7 @@ static void	set_arguments(t_command *cmd, int args)
 	int	i;
 	int	j;
 
-	cmd->arguments = (char **) malloc(sizeof(char *) * args);
+	cmd->arguments = (char **) malloc(sizeof(char *) * args + 1);
 	if (!(cmd->arguments))
 		return ;
 	i = 1;
@@ -76,6 +76,7 @@ static void	set_arguments(t_command *cmd, int args)
 		cmd->arguments[i - 1][j - 1] = '\0';
 		i++;
 	}
+	cmd->arguments[i - 1] = NULL;
 	if (i == 1)
 		cmd->arguments[0] = NULL;
 }

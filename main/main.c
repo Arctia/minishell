@@ -36,11 +36,13 @@ int	prompt_loop(t_hellmini *shell)
 		}
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
-		if (shell->input)
+		if (shell->input[0] != '\0')
 		{
-			lexer_init(shell);
-			parser(shell);
-			ft_executor(shell);
+			if (lexer_init(shell) == 0)
+			{
+				if (parser(shell) == SUCCESS)
+					ft_executor(shell);
+			}
 		}
 		free_commands(shell);
 		//rl_on_new_line();
