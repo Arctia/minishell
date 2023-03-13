@@ -86,32 +86,45 @@ int	(*ft_builtin(char *str))(t_hellmini *shell)
 
 void	ft_execv(t_hellmini *shell, pid_t pid)
 {
-	char	*path;
+	//char	*path;
 	char	**arg;
-	int		status;
-
-	path = ft_findpath(shell, 0);
+	//int		status;
+	int	tmp_index;
+	(void)pid;
+	tmp_index = 0;
+	write(1, "ppath\n", 7);
+	//path = ft_findpath(shell, 0);
+	//ft_printf("path:%s\n",path);
+	write(1, "aarg\n", 5);
 	arg = ft_listtomatrix(shell);
-	pid = fork();
-	if (!pid)
+	while (arg)
 	{
-		if (execve(path, arg, shell->env) == -1)
-		{
-			perror("execv execution failed");
-			free_shell(shell);
-			exit(1);
-		}
+		printf("%s\n", arg[tmp_index]);
+		tmp_index++;
 	}
-	else if (pid < 0)
-		perror("execv fork failed");
-	else
-	{
-		waitpid(pid, &status, WUNTRACED);
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			waitpid(pid, &status, WUNTRACED);
-	}
+	// pid = fork();
+	// if (!pid)
+	// {
+	// 	printf("PID= %d\n", pid);
+	// 	if (execve(path, arg, shell->env) == -1)
+	// 	{
+	// 		perror("execv execution failed");
+	// 		free_shell(shell);
+	// 		exit(1);
+	// 	}
+	// }
+	// else if (pid < 0)
+	// 	perror("execv fork failed");
+	// else
+	// {
+		// waitpid(pid, &status, WUNTRACED);
+		// while (!WIFEXITED(status) && !WIFSIGNALED(status))
+			// waitpid(pid, &status, WUNTRACED);
+	// }
+	write(1, "voila\n", 6);
 	ft_free_cmatrix(arg);
-	free(path);
+	write(1, "lematrix\n",10);
+	// free(path);
 	// exit(EXIT_FAILURE);
 }
 
@@ -138,9 +151,9 @@ void	ft_executor(t_hellmini *shell)
 	pid = 111;
 	while (cmd)
 	{
-		if (cmd->spc[DQUOTE] || cmd->spc[CASH])
-			cmd->command
-				= ft_expander(cmd->command, shell->env);
+		if (cmd->spc[DQUOTE] || cmd->spc[CASH] || cmd->spc[MQUOTE])
+			the_expanse(shell->current_cmd);
+		return ;
 		if (cmd->next == NULL)	//simple command?
 		{
 			// if (ft_strcmp(cmd->command, builtin[i]))

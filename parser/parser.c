@@ -204,11 +204,15 @@ int	split_string(t_command *cmd)
 	int		c;
 
 	init = cmd->str;
+	write(1, "ciaonez\n", 9);
 	move_to_next_char(cmd);
+	write(1, "le chars\n", 10);
 	items = items_in_string(cmd->str);
+	write(1, "le items\n", 10);
 	cmd->tokens = (char **) malloc(sizeof(char *) * items + 1);
 	if (!(cmd->tokens))
 		return (0);
+	write(1, "strings malloc ok\n", 19);
 	c = 0;
 	while (cmd->str[0] != 0)
 	{

@@ -69,13 +69,18 @@ int mini_sort(char *str)
     qi = ft_strchr_len(str, set[0]);
     wi = ft_strchr_len(str, set[1]);
     ci = ft_strchr_len(str, set[2]);
-    if (qi >= 0 && ((wi > ci && ci > qi) || (ci > wi && wi > qi)))
-            min = qi;
-    if (wi >= 0 && ((qi > ci && ci > wi) || (ci > qi && qi > wi)))
-            min = wi;
-    if (ci >= 0 && ((wi > qi && qi > ci) || (qi > wi && wi > ci)))
-            min = ci;
-
+    if (qi == -1)
+        qi = 2147483646;
+    if (wi == -1)
+        wi = 2147483646;
+    if (ci == -1)
+        ci = 2147483646;
+    if (qi >= 0 && ((wi >= ci && ci > qi) || (ci >= wi && wi > qi)))
+        min = qi;
+    if (wi >= 0 && ((qi >= ci && ci > wi) || (ci >= qi && qi > wi)))
+        min = wi;
+    if (ci >= 0 && ((wi >= qi && qi > ci) || (qi >= wi && wi > ci)))
+        min = ci;
     return (min);
 }
 
@@ -86,6 +91,7 @@ int    expansion_explosion(char *str,char tmp[4095], int *index, char **env)
     int     i;
     int     j;
 
+write(1, "YOYOYO\n", 7);
     i = *index;
     j = 0;
     while (str[++i] != '\''|| str[i] != '"' 
@@ -158,32 +164,36 @@ int    expansion_explosion(char *str,char tmp[4095], int *index, char **env)
 
 char *new_tkn(char *ol_tkn, t_command *cmd)
 {
-    int i;
+    size_t i;
     int f;
     int k;
     char tmp[4095];
     char c;
 
-    pfn("%t new_tkn");
-
+    pfn("%t new_tkn %s", ol_tkn);
     i = 0;
     k = -1;
+    pfn("%t sort = %d", mini_sort(ol_tkn));
     if (mini_sort(ol_tkn) >= 0)
     {
         while (i < ft_strlen(ol_tkn))
         {
+            pfn("%1t %d", i);
+
             f = mini_sort(ol_tkn);
             c = ol_tkn[f];
-            while (++k < f && (ol_tkn[k] != c && (c == '"' || c == '\'') || ol_tkn[k]))
+            while (k <= f || ((ol_tkn[k + 1] != c && (c == '"' || c == '\''))
+                || ol_tkn[k + 1]))
             {
+                pfn("dead loop");
                 if ((ol_tkn[k] == '$' && c == '"') || (c != '\'' && ol_tkn[k] == '$'))
                     i += expansion_explosion(ol_tkn, tmp, &k, cmd->shell->env);
-                tmp[i] = ol_tkn[k];
+                tmp[i++] = ol_tkn[k++];
             }
-            ol_tkn = ft_strdup(tmp);
-            return (ol_tkn);
+            i++;
         }
     }
-    else
-        return (ol_tkn);
+    free (ol_tkn);
+    ol_tkn = ft_strdup(tmp);
+    return (ol_tkn);
 }

@@ -11,7 +11,7 @@ void	lexer_error(char *message) //example and sketch of an exit error function, 
 int	split_operator_line(char *line, int i)
 {
 	char	quote;
-	char	operator;
+	//char	operator;
 
 	while (line[i] != 0)
 	{

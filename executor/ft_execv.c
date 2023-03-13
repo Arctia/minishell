@@ -119,15 +119,24 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	char			*temp;
 
 	path = ft_getpath(shell, 0);
-	ft_fixcommand(shell);
+	
+
+
+while(path[i++])
+	ft_printf("path[%d]:%s\n",i,path[i]);
+i=0;
+			ft_fixcommand(shell);
 	while (path[i])
 	{
 		dir = opendir(path[i]);
 		entry = readdir(dir);
 		while (entry)
 		{
-			if (ft_strcmp(entry->d_name, shell->current_cmd->command))
-			{
+	ft_printf("path[%d]:%s\n",i,path[i]);
+	// ft_printf("path[%d]:%s\n", i, path[i]);
+
+	if (ft_strcmp(entry->d_name, shell->current_cmd->command))
+	{
 				closedir(dir);
 
 				temp = ft_append(path[i], shell);

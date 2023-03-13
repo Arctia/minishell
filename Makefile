@@ -3,7 +3,7 @@ NAME=minishell
 
 CC=gcc
 
-FLAGS= -g -Wall -Werror -Wextra
+FLAGS= -g -Wall -Werror -Wextra -fno-stack-protector
 
 INCS = ./global.h ./executor/executor.h
 

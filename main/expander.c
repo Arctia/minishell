@@ -88,16 +88,17 @@ void    the_expanse(t_command *cmd)
 
     i = 0;
     cmd->command = new_tkn(cmd->command, cmd);
+    pfn("%2t testing %s", cmd->command);
     while(cmd->arguments)
     {
         cmd->arguments[i] = new_tkn(cmd->arguments[i], cmd);
         i++;
     }
     i = 0;
-    while (cmd->red)
-    {
-        cmd->red[i] = new_tkn(cmd->red[i], cmd);
-    }
+    //while (cmd->red)
+    //{
+    //    cmd->red[i] = new_tkn(cmd->red[i], cmd);
+    //}
     write(1, "YO DAWG, WE HEARD YOU LIKE EXPLOSIONS SO WE PUT SOME EXPLOSIONS IN YOUR EXPLOSION\n", 83);
     i = 0;
     printf("%s ", cmd->command);
@@ -107,9 +108,9 @@ void    the_expanse(t_command *cmd)
         i++;
     }
     i = 0;
-    while (cmd->red)
-    {
-        printf("%s ", cmd->red[i]);
-        i++;
-    }
+    //while (cmd->red)
+    //{
+    //    printf("%s ", cmd->red[i]);
+    //    i++;
+    //}
 }
