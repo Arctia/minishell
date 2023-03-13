@@ -91,6 +91,7 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 	//char	**env;
 	int		status;
 
+	ft_fixcommand(shell);
 	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
 	pid = fork();
@@ -166,5 +167,25 @@ void	ft_executor(t_hellmini *parser)
 		// ft_execv(parser, pid); //see function comment maybe every single exceptio call his own ft_sexecv
 		// if (parser->current_cmd->next)
 			parser->current_cmd = parser->current_cmd->next;
+	}
+}
+
+/*
+	***********************************************************
+					FT_FIXCOMMAND
+	***********************************************************
+	hope working
+	maybe generalize it if necessary
+*/
+
+void	ft_fixcommand(t_hellmini *shell)
+{
+	char	*temp;
+	if (ft_strncmp("./", shell->current_cmd->command, 2) == 0)
+	{
+		temp = ft_strtrim(shell->current_cmd->command, "./");
+		free(shell->current_cmd->command);
+		shell->current_cmd->command = ft_strdup(temp);
+		free(temp);
 	}
 }
