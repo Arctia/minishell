@@ -5,15 +5,10 @@ static void	free_things_inside_command(t_command *cmd)
 {
 	int	i;
 
-	if (cmd->str)
+	if (cmd->str != NULL)
 		free(cmd->str);
-	if (cmd->command)
+	if (cmd->command != NULL)
 		free(cmd->command);
-	if (cmd->next)
-		free(cmd->next);
-	if (cmd->prev)
-		free(cmd->prev);
-
 	i = 0;
 	if (cmd->tokens != NULL)
 	{
@@ -25,9 +20,10 @@ static void	free_things_inside_command(t_command *cmd)
 	if (cmd->arguments != NULL)
 	{
 		while (cmd->arguments[i])
-			free(cmd->arguments[i++]);
+				free(cmd->arguments[i++]);
 		free(cmd->arguments);
 	}
+	free(cmd);
 }
 
 void	free_commands(t_hellmini *shell)
@@ -41,15 +37,10 @@ void	free_commands(t_hellmini *shell)
 	pre = NULL;
 	while (cmd)
 	{
-		if (cmd->next)
-			nxt = cmd->next;
+		nxt = cmd->next;
 		free_things_inside_command(cmd);
-		if (nxt)
-			cmd = nxt;
-		else
-			cmd = NULL;
+		cmd = nxt;
 	}
-	free(shell->current_cmd);
 	shell->current_cmd = NULL;
 }
 

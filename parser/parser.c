@@ -234,30 +234,63 @@ void	init_flags(t_command *cmd)
 		cmd->spc[i--] = 0;
 }
 
+void	set_operator_flags(t_command *cmd, char *s, int *m)
+{
+	if (s[*m] == '|')
+		cmd->spc[PIPE] = 1;
+	else if (s[*m] == '<' && s[*m + 1] && s[*m + 1] == '<')
+	{
+		cmd->spc[REDAPP] = 1;
+		*m = *m + 1;
+	}
+	else if (s[*m] == '>' && s[*m + 1] && s[*m + 1] == '>')
+	{
+		cmd->spc[HERDOC] = 1;
+		*m = *m + 1;
+	}
+	else if (s[*m] == '<')
+		cmd->spc[REDIN] = 1;
+	else if (s[*m] == '>')
+		cmd->spc[REDOUT] = 1;
+}
+
+void	set_meta_flags(t_command *cmd,char c)
+{
+	if (c == '$')
+		cmd->spc[CASH] = 1;
+	else if (c == '\'' && cmd->spc[DQUOTE] == 1)
+		cmd->spc[MQUOTE] = 1;
+	else if (c == '"' && cmd->spc[SQUOTE] == 1)
+		cmd->spc[MQUOTE] = 1;
+	else if (c == '\'')
+		cmd->spc[SQUOTE] = 1;
+	else if (c == '"')
+		cmd->spc[DQUOTE] = 1;
+		
+}
+
 void	set_cmd_flags(t_command *cmd, int i)
 {
+	char	quote;
+	int		q;
+
+	q = 0;
+	quote = 0;
 	while (cmd->str[i])
 	{
-		if (cmd->str[i] == '|')
-			cmd->spc[PIPE] = 1;
-		else if (cmd->str[i] == '$')
-			cmd->spc[CASH] = 1;
-		else if (cmd->str[i] == '\'' && cmd->spc[DQUOTE] == 1)
-			cmd->spc[MQUOTE] = 1;
-		else if (cmd->str[i] == '"' && cmd->spc[SQUOTE] == 1)
-			cmd->spc[MQUOTE] = 1;
-		else if (cmd->str[i] == '\'')
-			cmd->spc[SQUOTE] = 1;
-		else if (cmd->str[i] == '"')
-			cmd->spc[DQUOTE] = 1;
-		else if (cmd->str[i] == '>' && cmd->str[i + 1] == '>')
-			cmd->spc[REDAPP] = 1;
-		else if (cmd->str[i] == '<' && cmd->str[i + 1] == '<')
-			cmd->spc[HERDOC] = 1;
-		else if (cmd->str[i] == '>' && cmd->str[i - 1] != '>')
-			cmd->spc[REDIN] = 1;
-		else if (cmd->str[i] == '<' && cmd->str[i - 1] != '<')
-			cmd->spc[REDOUT] = 1;
+		set_meta_flags(cmd, cmd->str[i]);
+		if (ft_isquote(cmd->str[i]) && q == 0)
+		{
+			quote = cmd->str[i];
+			q = 1;
+		}
+		else if (q == 1 && ft_isquote(cmd->str[i]) == quote)
+		{
+			quote = 0;
+			q = 0;
+		}
+		if (q == 0)
+			set_operator_flags(cmd, cmd->str, &i);
 		i++;
 	}
 }
