@@ -133,11 +133,8 @@ void	ft_executor(t_hellmini *shell)
 {
 	pid_t	pid;
 	t_command *cmd;
+
 	cmd = shell->current_cmd;
-
-	// shell = parser;
-
-	//int		status;
 	pid = 111;
 	while (cmd)
 	{
