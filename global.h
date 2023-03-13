@@ -80,6 +80,10 @@ typedef struct s_command
 	t_hellmini 			*shell;
 }	t_command;
 
+// main/free_structs.c
+void					free_commands(t_hellmini *shell);
+void					free_shell(t_hellmini *shell);
+
 // parser.c
 int						parser(t_hellmini *sh);
 

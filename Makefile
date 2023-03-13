@@ -13,6 +13,7 @@ SRCS=	./main/signals2_0.c \
 		./main/expander.c \
 		./main/env_handlers.c \
 		./main/main.c \
+		./main/free_structs.c \
 		./lexer/lexer.c \
 		./lexer/lexer_splitter.c \
 		./parser/parser.c \

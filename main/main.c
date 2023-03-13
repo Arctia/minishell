@@ -13,12 +13,6 @@
 //tokenizing the input. And it's quite some badass music.
 //If you don't agree, feel free to go and f##k off :)
 
-void	free_commands(t_hellmini *shell)
-{
-	free(shell->current_cmd);
-	shell->current_cmd = NULL;
-}
-
 int	prompt_loop(t_hellmini *shell)
 {
 	while(1)

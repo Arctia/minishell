@@ -99,7 +99,7 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 		if (execve(path, arg, shell->env) == -1)
 		{
 			perror("execv execution failed");
-			//free_things
+			free_shell(shell);
 			exit(1);
 		}
 	}
