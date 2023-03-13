@@ -15,6 +15,45 @@
 
 // }
 
+//return lowest number among three numbers, currently unused
+int mini_mini_sort(int a, int b, int c)
+{
+    int min;
+
+    min = -1;
+    if (a >= 0 && ((b > c && c > a) || (c > b && b > a)))
+            min = a;
+    if (b >= 0 && ((a > c && c > b) || (c > a && a > b)))
+            min = b;
+    if (c >= 0 && ((b > a && a > c) || (a > b && b > c)))
+            min = c;
+    return (min);
+}
+
+// int mini_sort(char *str)
+// {
+//     char set[2];
+//     int min;
+//     int qi;
+//     int wi;
+//     int ci;
+
+//     set[0] = '\'';
+//     set[1] = '"';
+//     set[2] = '$';
+//     qi = ft_strchr_len(str, set[0]);
+//     wi = ft_strchr_len(str, set[1]);
+//     ci = ft_strchr_len(str, set[2]);
+//     if (qi >= 0 && qi < wi && wi < ci)
+//         min = qi;
+//     else if (wi >= 0 && wi < qi && qi < ci)
+//         min = wi;
+//     else if (ci >= 0 && ci < qi && qi < wi)
+//         min = ci;
+//     return(min);
+// }
+
+//norm-proof version, fetches min nbr out of three
 int mini_sort(char *str)
 {
     char set[2];
@@ -26,16 +65,18 @@ int mini_sort(char *str)
     set[0] = '\'';
     set[1] = '"';
     set[2] = '$';
+    min = -1;
     qi = ft_strchr_len(str, set[0]);
     wi = ft_strchr_len(str, set[1]);
     ci = ft_strchr_len(str, set[2]);
-    if (qi < wi && wi < ci)
-        min = qi;
-    if (wi < qi && qi < ci)
-        min = wi;
-    if (ci < qi && qi < wi)
-        min = ci;
-    return(min);
+    if (qi >= 0 && ((wi > ci && ci > qi) || (ci > wi && wi > qi)))
+            min = qi;
+    if (wi >= 0 && ((qi > ci && ci > wi) || (ci > qi && qi > wi)))
+            min = wi;
+    if (ci >= 0 && ((wi > qi && qi > ci) || (qi > wi && wi > ci)))
+            min = ci;
+
+    return (min);
 }
 
 int    expansion_explosion(char *str,char tmp[4095], int *index, char **env)
@@ -62,22 +103,22 @@ int    expansion_explosion(char *str,char tmp[4095], int *index, char **env)
     return (i);
 }
 
-char    *new_tkn_aux(char *str, t_command cmd, int i , int k)
-{
-    int f;
-    int c;
-    char tmp[4095];
+// char    *new_tkn_aux(char *str, t_command cmd, int i , int k)
+// {
+//     int f;
+//     int c;
+//     char tmp[4095];
     
-    f = mini_sort(str);
-    c = str[f];
-    while (++k < f && (str[k] != c && (c == '"' || c == '\'') || str[k]))
-    {
-        if ((str[k] == '$' && c == '"') || (c != '\'' && str[k] == '$'))
-            i += expansion_explosion(str, tmp[4095], &k, &cmd.shell->env);
-        tmp[i] = str[k];
-    }
-    return (tmp);
-}
+//     f = mini_sort(str);
+//     c = str[f];
+//     while (++k < f && (str[k] != c && (c == '"' || c == '\'') || str[k]))
+//     {
+//         if ((str[k] == '$' && c == '"') || (c != '\'' && str[k] == '$'))
+//             i += expansion_explosion(str, tmp, &k, cmd.shell->env);
+//         tmp[i] = str[k];
+//     }
+//     return (tmp);
+// }
 
 // char    *new_tkn(char *ol_tkn, t_command cmd) 
 // {
@@ -134,10 +175,11 @@ char *new_tkn(char *ol_tkn, t_command cmd)
             while (++k < f && (ol_tkn[k] != c && (c == '"' || c == '\'') || ol_tkn[k]))
             {
                 if ((ol_tkn[k] == '$' && c == '"') || (c != '\'' && ol_tkn[k] == '$'))
-                    i += expansion_explosion(ol_tkn, tmp[4095], &k, &cmd.shell->env);
+                    i += expansion_explosion(ol_tkn, tmp, &k, cmd.shell->env);
                 tmp[i] = ol_tkn[k];
             }
-            return (tmp);
+            ol_tkn = ft_strdup(tmp);
+            return (ol_tkn);
         }
     }
     else

@@ -100,7 +100,7 @@ char					**rip_and_tear(t_command *command, char *str);
 //expander_utils.c
 int						mini_sort(char *str);
 int						expansion_explosion(char *str, char tmp[4095], int *index, char **env);
-void					new_tkn_aux(char *str, t_command cmd, int i, int k);
+char					*new_tkn_aux(char *str, t_command cmd, int i, int k);
 char					*new_tkn(char *ol_tkn, t_command cmd);
 
 //expander.c
