@@ -72,6 +72,9 @@ typedef struct s_command
 	char				**flags; // useless (?)
 	char				**arguments;
 
+	int					*red_type;
+	char				**red;
+
 	int		ret;
 
 	struct s_command 	*next;

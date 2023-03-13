@@ -238,12 +238,12 @@ void	set_operator_flags(t_command *cmd, char *s, int *m)
 {
 	if (s[*m] == '|')
 		cmd->spc[PIPE] = 1;
-	else if (s[*m] == '<' && s[*m + 1] && s[*m + 1] == '<')
+	else if (s[*m] == '>' && s[*m + 1] && s[*m + 1] == '>')
 	{
 		cmd->spc[REDAPP] = 1;
 		*m = *m + 1;
 	}
-	else if (s[*m] == '>' && s[*m + 1] && s[*m + 1] == '>')
+	else if (s[*m] == '<' && s[*m + 1] && s[*m + 1] == '<')
 	{
 		cmd->spc[HERDOC] = 1;
 		*m = *m + 1;

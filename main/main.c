@@ -22,23 +22,21 @@ int	prompt_loop(t_hellmini *shell)
 		shell->input = readline(PROMPT);
 		if (!shell->input)
 		{
-			{
 			write(1, "\rexit\n", 7);
 			rl_redisplay();
-			}
 			exit(0);
 		}
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
 		if (shell->input[0] != '\0')
 		{
-			pfn("%3t entering lexer");
+			pfn("%3t enter lexer");
 			if (lexer_init(shell) == 0)
 			{
-				pfn("%3t entering parser");
+				pfn("\n%3t enter parser");
 				if (parser(shell) == SUCCESS)
 				{
-					pfn("%3t entering executor");
+					pfn("\n%3t enter executor");
 					ft_executor(shell);
 				}
 			}
