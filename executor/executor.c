@@ -97,7 +97,11 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 	if (!pid)
 	{
 		if (execve(path, arg, shell->env) == -1)
+		{
 			perror("execv execution failed");
+			//free_things
+			exit(1);
+		}
 	}
 	else if (pid < 0)
 		perror("execv fork failed");
