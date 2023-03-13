@@ -26,14 +26,14 @@ int	split_operator_line(char *line, int i)
 		}
 		if (line[i] == '|')
 			break ;
-		else if (line[i] == '<' || line[i] == '>')
-		{
-			operator = line[i];
-			if (line[i + 1] == operator)
-				i++;
+		//else if (line[i] == '<' || line[i] == '>')
+		//{
+		//	operator = line[i];
+		//	if (line[i + 1] == operator)
+		//		i++;
 			//printf("splitto %s su %c\n", line, line[i]);
-			break;
-		}
+		//	break;
+		//}
 		i++;
 	}
 	return (i);
