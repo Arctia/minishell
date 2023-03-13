@@ -32,10 +32,15 @@ int	prompt_loop(t_hellmini *shell)
 			add_history(shell->input);
 		if (shell->input[0] != '\0')
 		{
+			pfn("%3t entering lexer");
 			if (lexer_init(shell) == 0)
 			{
+				pfn("%3t entering parser");
 				if (parser(shell) == SUCCESS)
+				{
+					pfn("%3t entering executor");
 					ft_executor(shell);
+				}
 			}
 		}
 		free_commands(shell);

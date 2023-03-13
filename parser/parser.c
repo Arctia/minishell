@@ -314,11 +314,14 @@ void	print_arguments_and_flags(t_command *cmd)
 		i++;
 	}
 	i = 0;
+	pfn("%t -----------------------");
 	while (i < 9)
 	{
-		pfn("%t %-8s-->  %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
+		if (cmd->spc[i])
+			pfn("%t %-8s-->  %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
 		i++;
 	}
+	pfn("%t -----------------------");
 }
 
 int	parser(t_hellmini *sh)

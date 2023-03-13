@@ -105,13 +105,15 @@ void	lexer_default(t_hellmini *shell, t_command *cmd, int not_new, int i)
 void	print_commands(t_command *cmd)
 {
 	t_command *tmp;
+	int	i;
 
 	tmp = cmd;
-
+	i = 0;
 	while (tmp && tmp != NULL)
 	{
-		ft_printf("%s\n", tmp->str);
+		pfn("%d. %s", i, tmp->str);
 		tmp = tmp->next;
+		i++;
 	}
 }
 
