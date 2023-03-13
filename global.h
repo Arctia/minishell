@@ -102,13 +102,14 @@ char					*split_line(char *line);
 int						tkn_nbr(char *str);
 int 					ft_strchr_len(char *str, char c);
 t_command				* count_pqwq(t_command *command, char *str);
+void					the_expanse(t_command *cmd);
 char					**rip_and_tear(t_command *command, char *str);
 
 //expander_utils.c
 int						mini_sort(char *str);
 int						expansion_explosion(char *str, char tmp[4095], int *index, char **env);
 char					*new_tkn_aux(char *str, t_command cmd, int i, int k);
-char					*new_tkn(char *ol_tkn, t_command cmd);
+char					*new_tkn(char *ol_tkn, t_command *cmd);
 
 //expander.c
 void					free_arr(char **split_arr);

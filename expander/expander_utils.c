@@ -156,13 +156,15 @@ int    expansion_explosion(char *str,char tmp[4095], int *index, char **env)
 //         return(ol_tkn);
 // }
 
-char *new_tkn(char *ol_tkn, t_command cmd)
+char *new_tkn(char *ol_tkn, t_command *cmd)
 {
     int i;
     int f;
     int k;
     char tmp[4095];
     char c;
+
+    pfn("%t new_tkn");
 
     i = 0;
     k = -1;
@@ -175,7 +177,7 @@ char *new_tkn(char *ol_tkn, t_command cmd)
             while (++k < f && (ol_tkn[k] != c && (c == '"' || c == '\'') || ol_tkn[k]))
             {
                 if ((ol_tkn[k] == '$' && c == '"') || (c != '\'' && ol_tkn[k] == '$'))
-                    i += expansion_explosion(ol_tkn, tmp, &k, cmd.shell->env);
+                    i += expansion_explosion(ol_tkn, tmp, &k, cmd->shell->env);
                 tmp[i] = ol_tkn[k];
             }
             ol_tkn = ft_strdup(tmp);
