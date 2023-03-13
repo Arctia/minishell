@@ -13,12 +13,6 @@
 //tokenizing the input. And it's quite some badass music.
 //If you don't agree, feel free to go and f##k off :)
 
-void	free_commands(t_hellmini *shell)
-{
-	free(shell->current_cmd);
-	shell->current_cmd = NULL;
-}
-
 int	prompt_loop(t_hellmini *shell)
 {
 	while(1)
@@ -28,19 +22,24 @@ int	prompt_loop(t_hellmini *shell)
 		shell->input = readline(PROMPT);
 		if (!shell->input)
 		{
-			{
 			write(1, "\rexit\n", 7);
 			rl_redisplay();
-			}
 			exit(0);
 		}
 		if (ft_strncmp(shell->input, "", 1))
 			add_history(shell->input);
-		if (shell->input)
+		if (shell->input[0] != '\0')
 		{
-			lexer_init(shell);
-			parser(shell);
-			ft_executor(shell);
+			pfn("%3t enter lexer");
+			if (lexer_init(shell) == 0)
+			{
+				pfn("\n%3t enter parser");
+				if (parser(shell) == SUCCESS)
+				{
+					pfn("\n%3t enter executor");
+					ft_executor(shell);
+				}
+			}
 		}
 		free_commands(shell);
 		//rl_on_new_line();

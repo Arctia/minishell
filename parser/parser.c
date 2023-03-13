@@ -1,44 +1,11 @@
 
 #include "../global.h"
+#define GRN "\033[1;32m"
+#define WHITE "\033[0m"
 
 /*##############################################################################
 #	Help Functions
 ############################################################################*/
-
-/*int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}*/
-
-void	debug(char *str)
-{
-	static char count = '0';
-
-	write(1, &count, 1);
-	write(1, " ", 1);
-	write(1, str, ft_strlen(str));
-	write(1, "\n", 1);
-	count += 1;
-}
-/*
-int	ft_isspace(int c)
-{
-	if (9 <= c && c <= 13 || c == 32)
-		return (1);
-	return (0);
-}
-
-int	ft_isnotspace(int c)
-{
-	if (9 <= c && c <= 13 || c == 32)
-		return (0);
-	return (1);
-}*/
 
 int	until_space(const char *str)
 {
@@ -56,6 +23,20 @@ void	move_to_next_char(t_command *cmd)
 		cmd->str++;
 }
 
+char	ft_isquote(char ch)
+{
+	if (ch == '\'' || ch == '"')
+		return (ch);
+	return ('\0');
+}
+
+int	to_next_quote(char *str, int i, char quote)
+{
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i);
+}
+
 /*##############################################################################
 #	Set command name
 ############################################################################*/
@@ -68,7 +49,7 @@ static void	set_command_name(t_command *cmd)
 			* ft_strlen(cmd->tokens[0]) + 1);
 	while (cmd->tokens[0][i++])
 		cmd->command[i - 1] = cmd->tokens[0][i - 1];
-	cmd->command[i] = '\0';
+	cmd->command[i - 1] = '\0';
 }
 
 static void	set_arguments(t_command *cmd, int args)
@@ -76,7 +57,7 @@ static void	set_arguments(t_command *cmd, int args)
 	int	i;
 	int	j;
 
-	cmd->arguments = (char **) malloc(sizeof(char *) * args);
+	cmd->arguments = (char **) malloc(sizeof(char *) * args + 1);
 	if (!(cmd->arguments))
 		return ;
 	i = 1;
@@ -84,7 +65,7 @@ static void	set_arguments(t_command *cmd, int args)
 	{
 		cmd->arguments[i - 1] = (char *) malloc(sizeof(char)
 				* ft_strlen(cmd->tokens[i]) + 1);
-		if (cmd->arguments[i - 1])
+		if (!cmd->arguments[i - 1])
 		{
 			free(cmd->arguments);
 			return ;
@@ -92,9 +73,10 @@ static void	set_arguments(t_command *cmd, int args)
 		j = 0;
 		while (cmd->tokens[i][j++])
 			cmd->arguments[i - 1][j - 1] = cmd->tokens[i][j - 1];
-		cmd->arguments[i - 1][j] = '\0';
+		cmd->arguments[i - 1][j - 1] = '\0';
 		i++;
 	}
+	cmd->arguments[i - 1] = NULL;
 	if (i == 1)
 		cmd->arguments[0] = NULL;
 }
@@ -106,6 +88,21 @@ static void	set_arguments(t_command *cmd, int args)
 		. return number of items to be stored
 		. single/double quotes TODO
 _________________________________________!_________________________________ */
+int	i_after_quote(char *str, int i, int *iw, int *in)
+{
+	char	c;
+
+	c = str[i];
+	if (*iw == 0 && str[i + 1] && str[i] != str[i + 1])
+	{
+		*iw = 1;
+		*in = *in + 1;
+	}
+	i++;
+	i = to_next_quote(str, i, c);
+	return (i);
+}
+
 int	items_in_string(char *str)
 {
 	int	items_number;
@@ -116,8 +113,10 @@ int	items_in_string(char *str)
 	in_word = 0;
 	items_number = 0;
 	while (str[i])
-	{
-		if (ft_isnotspace(str[i]) && in_word == 0)
+	{	
+		if (ft_isquote(str[i]))
+			i = i_after_quote(str, i, &in_word, &items_number);
+		else if (ft_isnotspace(str[i]) && in_word == 0)
 		{
 			items_number++;
 			in_word = 1;
@@ -154,13 +153,42 @@ void	write_word_expander(char *cnt, char *str)
 	cnt[i] = '\0';
 }
 
-void	write_word(char *cnt, t_command *cmd)
+// consider quotes!
+void	write_word_old(char *cnt, t_command *cmd)
 {
 	int	i;
 
 	i = 0;
 	while (cmd->str[0] && ft_isnotspace(cmd->str[0]))
+	{
 		cnt[i++] = cmd->str++[0];
+	}
+	cnt[i] = '\0';
+}
+
+void	write_word(char *cnt, t_command *cmd)
+{
+	int	i;
+	int	t;
+	int	c;
+
+	i = 0;
+	t = 0;
+	c = 0;
+	while (cmd->str[0])
+	{
+		if (ft_isquote(cmd->str[0]))
+		{
+			c = 0;
+			t = to_next_quote(cmd->str, 1, cmd->str[0]);
+			while (c++ <= t)
+				cnt[i++] = cmd->str++[0];
+		}
+		else
+			cnt[i++] = cmd->str++[0];
+		if (ft_isspace(cmd->str[0]))
+			break ;
+	}
 	cnt[i] = '\0';
 }
 
@@ -185,7 +213,7 @@ int	split_string(t_command *cmd)
 	while (cmd->str[0] != 0)
 	{
 		cmd->tokens[c] = (char *) malloc(sizeof(char)
-				* until_space(cmd->str) + 1);
+				* ft_strlen(cmd->str) + 1);
 		if (!(cmd->tokens[c]))
 			return (0);
 		write_word(cmd->tokens[c], cmd);
@@ -206,31 +234,63 @@ void	init_flags(t_command *cmd)
 		cmd->spc[i--] = 0;
 }
 
-void	set_cmd_flags(t_command *cmd)
+void	set_operator_flags(t_command *cmd, char *s, int *m)
 {
-	int	i;
+	if (s[*m] == '|')
+		cmd->spc[PIPE] = 1;
+	else if (s[*m] == '>' && s[*m + 1] && s[*m + 1] == '>')
+	{
+		cmd->spc[REDAPP] = 1;
+		*m = *m + 1;
+	}
+	else if (s[*m] == '<' && s[*m + 1] && s[*m + 1] == '<')
+	{
+		cmd->spc[HERDOC] = 1;
+		*m = *m + 1;
+	}
+	else if (s[*m] == '<')
+		cmd->spc[REDIN] = 1;
+	else if (s[*m] == '>')
+		cmd->spc[REDOUT] = 1;
+}
 
-	i = 0;
+void	set_meta_flags(t_command *cmd,char c)
+{
+	if (c == '$')
+		cmd->spc[CASH] = 1;
+	else if (c == '\'' && cmd->spc[DQUOTE] == 1)
+		cmd->spc[MQUOTE] = 1;
+	else if (c == '"' && cmd->spc[SQUOTE] == 1)
+		cmd->spc[MQUOTE] = 1;
+	else if (c == '\'')
+		cmd->spc[SQUOTE] = 1;
+	else if (c == '"')
+		cmd->spc[DQUOTE] = 1;
+		
+}
+
+void	set_cmd_flags(t_command *cmd, int i)
+{
+	char	quote;
+	int		q;
+
+	q = 0;
+	quote = 0;
 	while (cmd->str[i])
 	{
-		if (cmd->str[i] == '|')
-			cmd->spc[PIPE] = 1;
-		else if (cmd->str[i] == '\'' && cmd->spc[DQUOTE] == 1)
-			cmd->spc[MQUOTE] = 1;
-		else if (cmd->str[i] == '"' && cmd->spc[SQUOTE] == 1)
-			cmd->spc[MQUOTE] = 1;
-		else if (cmd->str[i] == '\'')
-			cmd->spc[SQUOTE] = 1;
-		else if (cmd->str[i] == '"')
-			cmd->spc[DQUOTE] = 1;
-		else if (cmd->str[i] == '>' && cmd->str[i + 1] == '>')
-			cmd->spc[REDAPP] = 1;
-		else if (cmd->str[i] == '<' && cmd->str[i + 1] == '<')
-			cmd->spc[HERDOC] = 1;
-		else if (cmd->str[i] == '>' && cmd->str[i - 1] != '>')
-			cmd->spc[REDIN] = 1;
-		else if (cmd->str[i] == '<' && cmd->str[i - 1] != '<')
-			cmd->spc[REDOUT] = 1;
+		set_meta_flags(cmd, cmd->str[i]);
+		if (ft_isquote(cmd->str[i]) && q == 0)
+		{
+			quote = cmd->str[i];
+			q = 1;
+		}
+		else if (q == 1 && ft_isquote(cmd->str[i]) == quote)
+		{
+			quote = 0;
+			q = 0;
+		}
+		if (q == 0)
+			set_operator_flags(cmd, cmd->str, &i);
 		i++;
 	}
 }
@@ -243,19 +303,25 @@ void	set_cmd_flags(t_command *cmd)
 void	print_arguments_and_flags(t_command *cmd)
 {
 	int	i;
-	char *ar[] = {"PIPE  ", "SQUOTE", "DQUOTE", "MQUOTE",
-			"REDIN ", "REDOUT", "REDAPP", "HERDOC"};
-	char *co[] = {"-XX- FALSE", "-\\/-   --:   TRUE"};
+	char *ar[] = {"PIPE", "SQUOTE", "DQUOTE", "MQUOTE",
+			"REDIN ", "REDOUT", "REDAPP", "HERDOC", "CASH"};
+	char *co[] = {" ", GRN"TRUE"WHITE};
 	i = 0;
+	pfn("%2t command: '%s'", cmd->command);
 	while (cmd->arguments[i])
-		debug(cmd->arguments[i++]);
-	debug("past");
-	i = 0;
-	while (i < 8)
 	{
-		printf("%s: %s\n", ar[(i - 1) % 8], co[cmd->spc[i] % 2]);
+		pfn("%2t arg[%d]: '%s'", i, cmd->arguments[i]);
 		i++;
 	}
+	i = 0;
+	pfn("%t -----------------------");
+	while (i < 9)
+	{
+		if (cmd->spc[i])
+			pfn("%t %-8s-->  %s", ar[(i) % 9], co[cmd->spc[i] % 2]);
+		i++;
+	}
+	pfn("%t -----------------------");
 }
 
 int	parser(t_hellmini *sh)
@@ -272,9 +338,12 @@ int	parser(t_hellmini *sh)
 		set_command_name(cmd);
 		set_arguments(cmd, args);
 		init_flags(cmd);
-		set_cmd_flags(cmd);
+		set_cmd_flags(cmd, 0);
 		print_arguments_and_flags(cmd);
-		cmd = cmd->next;
+		if (cmd->next)
+			cmd = cmd->next;
+		else
+			break ;
 	}
 	return (SUCCESS);
 }

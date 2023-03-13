@@ -1,4 +1,27 @@
-#include "./../../global.h"
+#include "./../global.h"
+
+t_command	*init_command(t_hellmini *shell)
+{
+	t_command	*cmd;
+	int	i;
+
+	cmd = (t_command *) malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->str = NULL;
+	cmd->tokens = NULL;
+	i = 0;
+	while (i < 9)
+		cmd->spc[i++] = 0;
+	cmd->command = NULL;
+	cmd->flags = NULL;
+	cmd->arguments = NULL;
+	cmd->ret = 0;
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->shell = shell;
+	return (cmd);
+}
 
 void	kalirio()
 {
@@ -31,43 +54,21 @@ int	ft_isspace(int c)
 	return (0);
 }*/
 
-//second part of the function below
-int	check_quotes(char *line, int i) 
-{
-	//static int h = 0;
-	char	quote;
-
-	quote = line[i];
-	while (line[i] != quote)
-	{
-		if ((line[i] == '\"' || line[i] == '\'') && line[i] != quote)
-		{
-			i = check_quotes(line, i);
-			//printf("i = %d, %c\nh = %d", i, line[i], h);
-			if (i == -1)
-				return (-1);
-		}
-		if (line[i] == 0)
-			return (-1);
-		i++;
-	}
-	return (i);
-}
-
-//makes sure no quotes are weirdly innested into each other, redirecting to "check argument"
+//makes sure no quotes are not closed
 int check_closures(char *line, int i)
 {
-	//printf("augusto: meow, la linea è: %s, i è:%d\n", line, i);
+	char	quote;
+	//pfn("augusto: meow, la linea è: %s, i è:%d\n", line, i);
 	while (line[i] != 0)
 	{
 		if (line[i] == '\'' || line[i] == '\"')
 		{
-			i = check_quotes(line, i);
-			if (i == -1)
-			{
-				write(1, "!", 1);
+			quote = line[i];
+			i++;
+			while (line[i] != 0 && line[i] != quote)
+				i++;
+			if (line[i] == 0)
 				return (-1);
-			}
 		}
 		i++;
 	}
@@ -76,30 +77,25 @@ int check_closures(char *line, int i)
 }
 
 //searches and split following commands from the line on the next command argument
-void	lexer_default(char *line, t_command *cmd, int not_new)
+void	lexer_default(t_hellmini *shell, t_command *cmd, int not_new, int i)
 {
-	t_command *tmp;
-	int	i;
+	t_command	*tmp;
+	char		*line;
 
-	i = 0;
+	line = shell->input;
 	while (1)
 	{
 		if (cmd == NULL)
 		{
-			cmd = (t_command *) malloc(sizeof(t_command));
+			cmd = init_command(shell);
 			if (!cmd)
 				return ;
-			cmd->next = NULL;
 			tmp->next = cmd;
 			cmd->prev = tmp;
 		}
-		if (line[i] == 0 || line[i] == '|' || line[i] == '<' || line[i] == '>')
-		{
-			cmd->str = split_operator(line, &i, not_new++);
-			//printf("splitto%c\n", line[i]);
-			tmp = cmd;
-			cmd = cmd->next;
-		}
+		cmd->str = split_operator(line, &i, not_new++);
+		tmp = cmd;
+		cmd = NULL;
 		if (line[i] == '\0')
 			break ;
 		i++;
@@ -109,13 +105,15 @@ void	lexer_default(char *line, t_command *cmd, int not_new)
 void	print_commands(t_command *cmd)
 {
 	t_command *tmp;
+	int	i;
 
 	tmp = cmd;
-
-	while (tmp != NULL && tmp)
+	i = 0;
+	while (tmp && tmp != NULL)
 	{
-		printf("%s\n", tmp->str);
+		pfn("%d. %s", i, tmp->str);
 		tmp = tmp->next;
+		i++;
 	}
 }
 
@@ -182,19 +180,21 @@ int lexer_init(t_hellmini *shell)
 	int			i;
 
 	line = shell->input;
-	line[ft_strlen(line) + 1] = '\0';
+	line[ft_strlen(line)] = '\0';
 	i = 0;
 	if (check_syntax(line, i) != 0)
 	{
 		lexer_error("bad syntax.");
 		return (-1);
 	}
-	shell->current_cmd = (t_command *)malloc(sizeof(t_command));
+	shell->current_cmd = init_command(shell);
 	if (!(shell->current_cmd))
 		return (-1);
-	lexer_default(line, shell->current_cmd, 0);
+	lexer_default(shell, shell->current_cmd, 0, 0);
 	//printf("%s", shell->current_cmd->str);
+	
 	print_commands(shell->current_cmd);
+	
 	return (0);
 }
 

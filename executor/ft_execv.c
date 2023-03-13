@@ -75,6 +75,7 @@ char	**ft_getpath(t_hellmini *shell, int i)
 	char	*temp;
 	char	cwd[MAXPATHLEN];
 
+	ritemp = NULL;
 	i = 0;
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		;
@@ -85,14 +86,20 @@ char	**ft_getpath(t_hellmini *shell, int i)
 		if (ft_strncmp("PATH", shell->env[i], 4) == 0)
 		{
 			temp = ft_strtrim(shell->env[i], "PATH=");
-			ritemp = ft_split(temp, ':');
+			if (ft_strncmp("./", shell->current_cmd->command, 2) == 0)
+				ritemp = ft_split(temp, ':');
+			else
+				path = ft_split(temp, ':');
 			free(temp);
 			break ;
 		}
 		i++;
 	}
-	path = ft_addlinetomatrix(ritemp, cwd);
-	free(ritemp);
+	if (ritemp)
+	{
+		path = ft_addlinetomatrix(ritemp, cwd);
+		free(ritemp);
+	}
 	return (path);
 }
 
@@ -134,7 +141,12 @@ char	*ft_findpath(t_hellmini *shell, int i)
 	return (NULL);
 }
 
-
+/*
+	***********************************************************
+					FT_ADDLINETOMATRIX
+	***********************************************************
+	working
+*/
 
 char	**ft_addlinetomatrix(char **arr, char *line)
 {
