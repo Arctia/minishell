@@ -87,13 +87,11 @@ int	(*ft_builtin(char *str))(t_hellmini *shell)
 void	ft_execv(t_hellmini *shell, pid_t pid)
 {
 	char	*path;
-	char	**arg; /* array[4] tt a null e metto dentro i cmd che mi servono */
-	//char	**env;
+	char	**arg;
 	int		status;
 
-	ft_fixcommand(shell);
-	arg = ft_listtomatrix(shell);
 	path = ft_findpath(shell, 0);
+	arg = ft_listtomatrix(shell);
 	pid = fork();
 	if (!pid)
 	{
@@ -131,42 +129,46 @@ void	ft_execv(t_hellmini *shell, pid_t pid)
 	fd between pipe or maybe not
 
 */
-void	ft_executor(t_hellmini *parser)
+void	ft_executor(t_hellmini *shell)
 {
 	pid_t	pid;
+	t_command *cmd;
+	cmd = shell->current_cmd;
+
+	// shell = parser;
 
 	//int		status;
 	pid = 111;
-	while (parser->current_cmd)
+	while (cmd)
 	{
-		if (parser->current_cmd->spc[DQUOTE] || parser->current_cmd->spc[CASH])
-			parser->current_cmd->command
-				= ft_expander(parser->current_cmd->command, parser->env);
-		if (parser->current_cmd->next == NULL)	//simple command?
+		if (cmd->spc[DQUOTE] || cmd->spc[CASH])
+			cmd->command
+				= ft_expander(cmd->command, shell->env);
+		if (cmd->next == NULL)	//simple command?
 		{
-			// if (ft_strcmp(parser->current_cmd->command, builtin[i]))
-			//if (ft_builtin(parser->current_cmd->command))
+			// if (ft_strcmp(cmd->command, builtin[i]))
+			//if (ft_builtin(cmd->command))
 			//	;
 			//else
-			ft_execv(parser, pid);
+			ft_execv(shell, pid);
 		}
-		else if (parser->current_cmd->spc[REDIN])
-			ft_less(parser);
-		else if (parser->current_cmd->spc[REDOUT])
-			ft_redir(parser);
-		else if (parser->current_cmd->spc[REDAPP])
-			ft_moremore(parser);
-		else if (parser->current_cmd->spc[HERDOC])
-			ft_heredoc(parser);
-		else if (parser->current_cmd->spc[PIPE])
+		else if (cmd->spc[REDIN])
+			ft_less(shell);
+		else if (cmd->spc[REDOUT])
+			ft_redir(shell);
+		else if (cmd->spc[REDAPP])
+			ft_moremore(shell);
+		else if (cmd->spc[HERDOC])
+			ft_heredoc(shell);
+		else if (cmd->spc[PIPE])
 		{
-			ft_pipe(parser);
+			ft_pipe(shell);
 			// while (waitpid(0, &status ,0))
 			// 	;//? not sure if here or in ft_executor with a while loop
 		}
-		// ft_execv(parser, pid); //see function comment maybe every single exceptio call his own ft_sexecv
-		// if (parser->current_cmd->next)
-			parser->current_cmd = parser->current_cmd->next;
+		// ft_execv(shell, pid); //see function comment maybe every single exceptio call his own ft_sexecv
+		// if (cmd->next)
+			cmd = cmd->next;
 	}
 }
 
